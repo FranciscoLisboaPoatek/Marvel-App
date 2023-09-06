@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/card_img"
+        android:layout_width="wrap_content"
+        android:layout_height="240dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/character_card_img" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/card_favorite_icon_top_margin"
+        android:layout_marginEnd="@dimen/card_favorite_icon_end_margin"
+        app:layout_constraintEnd_toEndOf="@id/card_img"
+        app:layout_constraintTop_toTopOf="@id/card_img"
+        tools:src="@drawable/ic_favorite_checked" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/card_img"
+        app:layout_constraintEnd_toEndOf="@id/card_img"
+        app:layout_constraintStart_toStartOf="@id/card_img">
+
+        <ImageView
+            android:id="@+id/name_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/character_card_name_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/character_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_text_name_start_margin"
+            android:layout_marginTop="@dimen/card_text_name_top_margin"
+            android:layout_marginEnd="@dimen/card_text_name_end_margin"
+            android:autoSizeMaxTextSize="@dimen/card_name_max_font_size"
+            android:autoSizeMinTextSize="@dimen/card_name_min_font_size"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Iron Man" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

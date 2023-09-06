@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_favorite_icon_end_margin">16dp</dimen>
+    <dimen name="card_favorite_icon_top_margin">16dp</dimen>
+    <dimen name="card_text_name_top_margin">10dp</dimen>
+    <dimen name="card_text_name_start_margin">16dp</dimen>
+    <dimen name="card_text_name_end_margin">16dp</dimen>
+    <dimen name="card_name_max_font_size">13sp</dimen>
+    <dimen name="card_name_min_font_size">11sp</dimen>
+</resources>
