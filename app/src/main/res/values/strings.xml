@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Marvel-App</string>
+    <string name="app_name">Marvel App</string>
+    <string name="bottom_nav_discover_text">Discover</string>
+    <string name="bottom_nav_favorites_text">Favorites</string>
 </resources>
