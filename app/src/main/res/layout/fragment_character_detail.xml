@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/character_detail_img_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/character_detail_img_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/character_detail_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:src="@drawable/character_detail_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/character_detail_img_shadow_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:src="@drawable/character_detail_img_shadow_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/character_detail_img_shadow_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:src="@drawable/character_detail_img_shadow_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/character_detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/character_detail_name_margin"
+            android:autoSizeMaxTextSize="@dimen/character_detail_name_max_text_size"
+            android:autoSizeMinTextSize="@dimen/character_detail_name_min_text_size"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto"
+            android:maxLines="2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/character_detail_name_max_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Iron Man" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/character_detail_description_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_detail_img_layout">
+
+        <TextView
+            android:id="@+id/character_detail_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/character_detail_description_margin_horizontal"
+            android:layout_marginTop="@dimen/character_detail_description_margin_top"
+            android:fontFamily="@font/roboto"
+            android:textSize="@dimen/character_detail_description_text_size"
+            tools:text="@tools:sample/lorem/random" />
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
