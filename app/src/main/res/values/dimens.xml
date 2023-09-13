@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="character_detail_img_height">319dp</dimen>
-    <dimen name="character_detail_name_margin">23dp</dimen>
-    <dimen name="character_detail_name_max_text_size">28sp</dimen>
-    <dimen name="character_detail_name_min_text_size">24sp</dimen>
-    <dimen name="character_detail_description_margin_horizontal">24dp</dimen>
-    <dimen name="character_detail_description_margin_top">20dp</dimen>
-    <dimen name="character_detail_description_text_size">16sp</dimen>
+    <dimen name="detail_medium_margin">24dp</dimen>
+    <dimen name="detail_description_margin_top">16dp</dimen>
+    <dimen name="detail_name_max_text_size">28sp</dimen>
+    <dimen name="detail_name_min_text_size">24sp</dimen>
+    <dimen name="detail_description_text_size">16sp</dimen>
 
 </resources>
