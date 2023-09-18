@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/list_item_padding">
 
     <ImageView
         android:id="@+id/list_item_discover_character_image_view"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/list_item_discover_character_image_view_height"
         android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/character_card_img" />
@@ -50,14 +52,14 @@
             android:layout_marginStart="@dimen/list_item_discover_medium_margin"
             android:layout_marginTop="@dimen/list_item_name_margin_top"
             android:layout_marginEnd="@dimen/list_item_discover_medium_margin"
-            android:autoSizeMaxTextSize="@dimen/list_item_name_max_font_size"
-            android:autoSizeMinTextSize="@dimen/list_item_name_min_font_size"
-            android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:fontFamily="@font/komika_hand"
             android:maxLines="2"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
+            app:autoSizeMaxTextSize="@dimen/list_item_name_max_font_size"
+            app:autoSizeMinTextSize="@dimen/list_item_name_min_font_size"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
