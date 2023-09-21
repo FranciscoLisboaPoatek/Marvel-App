@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="recycler_view_padding">10dp</dimen>
     <dimen name="list_item_discover_medium_margin">16dp</dimen>
+    <dimen name="list_item_padding">5dp</dimen>
     <dimen name="list_item_name_margin_top">10dp</dimen>
     <dimen name="list_item_name_max_font_size">13sp</dimen>
     <dimen name="list_item_name_min_font_size">11sp</dimen>
     <dimen name="list_item_discover_character_image_view_height">240dp</dimen>
+    <dimen name="list_item_favorite_character_image_view_height">204dp</dimen>
 </resources>

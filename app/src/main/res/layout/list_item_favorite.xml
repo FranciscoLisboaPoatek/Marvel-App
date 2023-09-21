@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/list_item_favorite_character_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/list_item_favorite_character_image_view_height"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/character_linear_list_img" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/list_item_favorite_name_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/list_item_favorite_character_image_view"
+        app:layout_constraintEnd_toEndOf="@id/list_item_favorite_character_image_view"
+        app:layout_constraintStart_toStartOf="@id/list_item_favorite_character_image_view">
+
+        <ImageView
+            android:id="@+id/list_item_favorite_name_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:src="@drawable/character_linear_name_background" />
+
+        <TextView
+            android:id="@+id/list_item_favorite_character_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="@dimen/list_item_name_margin_top"
+            app:autoSizeMaxTextSize="@dimen/list_item_name_max_font_size"
+            app:autoSizeMinTextSize="@dimen/list_item_name_min_font_size"
+            app:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:fontFamily="@font/komika_hand"
+            android:maxLines="2"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Iron Man" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
