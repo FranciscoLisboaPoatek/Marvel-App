@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="character_detail_img_height">319dp</dimen>
+    <dimen name="detail_medium_margin">24dp</dimen>
+    <dimen name="detail_description_margin_top">16dp</dimen>
+    <dimen name="detail_name_max_text_size">28sp</dimen>
+    <dimen name="detail_name_min_text_size">24sp</dimen>
+    <dimen name="detail_description_text_size">16sp</dimen>
+
     <dimen name="recycler_view_padding">10dp</dimen>
     <dimen name="list_item_discover_medium_margin">16dp</dimen>
     <dimen name="list_item_padding">5dp</dimen>
