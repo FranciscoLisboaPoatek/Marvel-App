@@ -14,58 +14,43 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="false"
-            app:contentScrim="@color/design_default_color_primary"
+            app:contentScrim="#E43830"
             app:expandedTitleTextColor="@android:color/white"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="@string/app_name">
+            app:title="@string/app_name"
+            app:toolbarId="@id/toolbar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/character_detail_image_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="@dimen/character_detail_img_height"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/character_detail_img"
+                app:layout_collapseMode="parallax" />
 
-                <ImageView
-                    android:id="@+id/character_detail_image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/character_detail_img_height"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/character_detail_img" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:background="@drawable/character_detail_img_shadow_top" />
 
-                <ImageView
-                    android:id="@+id/character_detail_img_shadow_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/character_detail_img_shadow_top"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/character_detail_img_shadow_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/character_detail_img_shadow_bottom"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/character_detail_img_shadow_bottom" />
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/character_detail_menu" />
+                app:menu="@menu/character_detail_menu"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/character_detail_description_scroll_view"
@@ -82,7 +67,7 @@
             android:fontFamily="@font/roboto"
             android:text="@string/lorem_ipsium"
             android:textSize="@dimen/detail_description_text_size" />
-    </androidx.core.widget.NestedScrollView>
 
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
