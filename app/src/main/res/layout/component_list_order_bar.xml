@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/order_bar"
+    android:orientation="horizontal"
+    android:paddingStart="20dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/top_app_bar">
+
+    <TextView
+        android:id="@+id/list_order_type_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        tools:text="Ordering By Name"/>
+    <TextView
+        android:id="@+id/list_order_asc_desc"
+        android:layout_marginStart="5dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        tools:text="↑"/>
+
+    <Button
+        android:id="@+id/list_order_change_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/order_bar"
+        android:text="@string/btn_change"
+        android:textColor="@color/white" />
+
+</LinearLayout>

@@ -35,7 +35,8 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -50,28 +51,4 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/order_bar"
-        android:orientation="horizontal"
-        android:paddingStart="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_app_bar">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/order_bar"
-            android:text="@string/btn_change"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
