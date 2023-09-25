@@ -6,4 +6,5 @@ Maecenas sollicitudin turpis aliquam erat rhoncus, id fermentum ante porttitor. 
 Vestibulum congue pretium mauris bibendum fermentum. Duis nunc leo, hendrerit ut consectetur elementum, pretium ut metus. Suspendisse aliquet cursus magna. Nam quis eros lacus. Praesent vulputate odio quis tempor scelerisque. Proin at ipsum sapien. Ut tincidunt magna a risus semper, vitae commodo eros interdum.</string>
     <string name="favorite">favorite</string>
     <string name="search">search</string>
+    <string name="btn_change">Change</string>
 </resources>
