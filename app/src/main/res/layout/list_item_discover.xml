@@ -1,70 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/list_item_padding">
-
-    <ImageView
-        android:id="@+id/list_item_discover_character_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/list_item_discover_character_image_view_height"
-        android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/character_card_img" />
-
-    <ImageView
-        android:id="@+id/list_item_discover_favorite_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_item_discover_medium_margin"
-        android:layout_marginEnd="@dimen/list_item_discover_medium_margin"
-        android:importantForAccessibility="no"
-        app:layout_constraintEnd_toEndOf="@id/list_item_discover_character_image_view"
-        app:layout_constraintTop_toTopOf="@id/list_item_discover_character_image_view"
-        tools:src="@drawable/ic_favorite_checked" />
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+            name="character"
+            type="com.example.marvel_app.feature_character.domain.models.Character" />
+    </data>
+        
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/list_item_discover_name_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/list_item_discover_character_image_view"
-        app:layout_constraintEnd_toEndOf="@id/list_item_discover_character_image_view"
-        app:layout_constraintStart_toStartOf="@id/list_item_discover_character_image_view">
+        android:padding="@dimen/list_item_padding">
 
         <ImageView
-            android:id="@+id/list_item_discover_name_background"
+            android:id="@+id/list_item_discover_character_image_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/list_item_discover_character_image_view_height"
             android:importantForAccessibility="no"
-            android:src="@drawable/character_grid_name_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/list_item_discover_character_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/list_item_discover_medium_margin"
-            android:layout_marginTop="@dimen/list_item_name_margin_top"
-            android:layout_marginEnd="@dimen/list_item_discover_medium_margin"
-            android:ellipsize="end"
-            android:fontFamily="@font/komika_hand"
-            android:maxLines="2"
-            android:textAlignment="viewStart"
-            android:textColor="@color/black"
-            app:autoSizeMaxTextSize="@dimen/list_item_name_max_font_size"
-            app:autoSizeMinTextSize="@dimen/list_item_name_min_font_size"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Iron Man" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:src="@drawable/character_card_img" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/list_item_discover_favorite_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_discover_medium_margin"
+            android:layout_marginEnd="@dimen/list_item_discover_medium_margin"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="@id/list_item_discover_character_image_view"
+            app:layout_constraintTop_toTopOf="@id/list_item_discover_character_image_view"
+            tools:src="@drawable/ic_favorite_checked" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list_item_discover_name_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/list_item_discover_character_image_view"
+            app:layout_constraintEnd_toEndOf="@id/list_item_discover_character_image_view"
+            app:layout_constraintStart_toStartOf="@id/list_item_discover_character_image_view">
+
+            <ImageView
+                android:id="@+id/list_item_discover_name_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:src="@drawable/character_grid_name_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/list_item_discover_character_name"
+                android:text="@{character.name}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/list_item_discover_medium_margin"
+                android:layout_marginTop="@dimen/list_item_name_margin_top"
+                android:layout_marginEnd="@dimen/list_item_discover_medium_margin"
+                android:ellipsize="end"
+                android:fontFamily="@font/komika_hand"
+                android:maxLines="2"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="@dimen/list_item_name_max_font_size"
+                app:autoSizeMinTextSize="@dimen/list_item_name_min_font_size"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Iron Man" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
