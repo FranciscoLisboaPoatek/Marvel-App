@@ -9,4 +9,5 @@ Vestibulum congue pretium mauris bibendum fermentum. Duis nunc leo, hendrerit ut
     <string name="favorite">favorite</string>
     <string name="search">search</string>
     <string name="btn_change">Change</string>
+    <string name="ordering_by_name">Ordering By Name</string>
 </resources>
