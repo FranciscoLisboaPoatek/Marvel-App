@@ -1,4 +1,4 @@
-package com.example.marvel_app.feature_character.presentation_character_detail
+package com.example.marvel_app.feature_character.presentation.character_detail
 
 import androidx.fragment.app.Fragment
 import com.example.marvel_app.R

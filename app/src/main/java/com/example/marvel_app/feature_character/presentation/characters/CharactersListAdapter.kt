@@ -1,4 +1,4 @@
-package com.example.marvel_app.feature_character.presentation_characters
+package com.example.marvel_app.feature_character.presentation.characters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,7 +30,6 @@ class CharactersListAdapter() :
         }
 
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return CharacterViewHolder(
