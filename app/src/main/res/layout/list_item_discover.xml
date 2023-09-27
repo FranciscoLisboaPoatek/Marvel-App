@@ -23,7 +23,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/character_card_img" />
+            android:src="@drawable/character_card_img" />
 
         <ImageView
             android:id="@+id/list_item_discover_favorite_icon"

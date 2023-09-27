@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
+import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.presentation.BaseFragment
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
@@ -18,11 +19,15 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         val adapter = CharactersListAdapter()
+
         binding.lifecycleOwner = this
         binding.discoverGridRecyclerView.adapter = adapter
+
         adapter.submitList(charactersViewModel.characterList.value)
 
+        charactersViewModel.characterList.observe(viewLifecycleOwner) {
+                characterList ->
+            adapter.submitList(characterList)
+        }
     }
-
-
 }
