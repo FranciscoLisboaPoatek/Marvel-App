@@ -11,7 +11,7 @@ import com.example.marvel_app.feature_character.domain.models.Character
 class FavoriteCharactersListAdapter():
     ListAdapter<Character, FavoriteCharactersListAdapter.FavoriteCharacterViewHolder>(DiffCallback){
 
-    class FavoriteCharacterViewHolder (var binding: ListItemFavoriteBinding):
+    class FavoriteCharacterViewHolder (private var binding: ListItemFavoriteBinding):
         RecyclerView.ViewHolder(binding.root){
             fun bind(character: Character){
                 binding.character = character

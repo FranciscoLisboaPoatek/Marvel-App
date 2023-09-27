@@ -3,11 +3,8 @@ package com.example.marvel_app.feature_character.presentation.characters
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
-import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.presentation.BaseFragment
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
@@ -22,24 +19,10 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
         binding.discoverGridRecyclerView.adapter = adapter
 
-        //adapter.submitList(charactersViewModel.charactersList.value)
+        adapter.submitList(charactersViewModel.charactersList.value)
 
-        adapter.submitList(
-            mutableListOf(
-                Character(1,"","Iron Man",""),
-                Character(1,"","Iron Man",""),
-                Character(1,"","batman",""),
-                Character(1,"","Iron Man",""),
-                Character(1,"","Iron Man",""),
-                Character(1,"","Iron Man",""),
-                Character(1,"","Iron Man",""),
-                Character(1,"","Iron Man",""),
-            )
-        )
-
-//        charactersViewModel.charactersList.observe(viewLifecycleOwner) {
-//                characterList ->
-//            adapter.submitList(characterList)
-//        }
+        charactersViewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
+            adapter.submitList(characterList)
+        }
     }
 }

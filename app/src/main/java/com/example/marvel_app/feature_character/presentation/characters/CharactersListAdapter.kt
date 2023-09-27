@@ -11,7 +11,7 @@ import com.example.marvel_app.feature_character.domain.models.Character
 class CharactersListAdapter() :
     ListAdapter<Character, CharactersListAdapter.CharacterViewHolder>(DiffCallback) {
 
-    class CharacterViewHolder(var binding: ListItemDiscoverBinding) :
+    class CharacterViewHolder(private var binding: ListItemDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(character: Character) {
             binding.character = character
