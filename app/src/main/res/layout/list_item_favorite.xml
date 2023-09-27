@@ -14,16 +14,19 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/list_item_padding">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/list_item_favorite_character_image_view"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/list_item_favorite_character_image_view_height"
+            android:scaleType="centerCrop"
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/character_linear_list_img" />
+            android:src="@drawable/character_linear_list_img"
+            app:strokeWidth="6dp"
+            app:strokeColor="@color/black"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list_item_favorite_name_layout"
@@ -41,7 +44,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:src="@drawable/character_linear_name_background" />
+                android:src="@drawable/character_linear_name_background" />
 
             <TextView
                 android:id="@+id/list_item_favorite_character_name"

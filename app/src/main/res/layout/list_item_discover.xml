@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/list_item_padding">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/list_item_discover_character_image_view"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/list_item_discover_character_image_view_height"
@@ -23,7 +23,9 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/character_card_img" />
+            android:src="@drawable/character_card_img"
+            app:strokeWidth="6dp"
+            app:strokeColor="@color/black"/>
 
         <ImageView
             android:id="@+id/list_item_discover_favorite_icon"
