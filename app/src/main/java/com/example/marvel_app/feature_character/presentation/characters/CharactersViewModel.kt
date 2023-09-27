@@ -7,6 +7,6 @@ import com.example.marvel_app.feature_character.domain.models.Character
 
 class CharactersViewModel : ViewModel() {
 
-    private val _characterList = MutableLiveData<List<Character>>()
-    val characterList: MutableLiveData<List<Character>> = _characterList
+    private val _charactersList = MutableLiveData<List<Character>>()
+    val charactersList: MutableLiveData<List<Character>> = _charactersList
 }

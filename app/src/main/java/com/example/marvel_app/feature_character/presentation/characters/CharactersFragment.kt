@@ -20,14 +20,26 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         val adapter = CharactersListAdapter()
 
-        binding.lifecycleOwner = this
         binding.discoverGridRecyclerView.adapter = adapter
 
-        adapter.submitList(charactersViewModel.characterList.value)
+        //adapter.submitList(charactersViewModel.charactersList.value)
 
-        charactersViewModel.characterList.observe(viewLifecycleOwner) {
-                characterList ->
-            adapter.submitList(characterList)
-        }
+        adapter.submitList(
+            mutableListOf(
+                Character(1,"","Iron Man",""),
+                Character(1,"","Iron Man",""),
+                Character(1,"","batman",""),
+                Character(1,"","Iron Man",""),
+                Character(1,"","Iron Man",""),
+                Character(1,"","Iron Man",""),
+                Character(1,"","Iron Man",""),
+                Character(1,"","Iron Man",""),
+            )
+        )
+
+//        charactersViewModel.charactersList.observe(viewLifecycleOwner) {
+//                characterList ->
+//            adapter.submitList(characterList)
+//        }
     }
 }
