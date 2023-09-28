@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_character"
     app:startDestination="@id/charactersFragment">
-
-
     <fragment
         android:id="@+id/charactersFragment"
-        android:name="com.example.marvel_app.feature_character.presentation_characters.CharactersFragment"
+        android:name="com.example.marvel_app.feature_character.presentation.characters.CharactersFragment"
         android:label="CharactersFragment" >
         <action
             android:id="@+id/action_charactersFragment_to_characterDetailFragment"
@@ -16,11 +14,11 @@
     </fragment>
     <fragment
         android:id="@+id/characterDetailFragment"
-        android:name="com.example.marvel_app.feature_character.presentation_character_detail.CharacterDetailFragment"
+        android:name="com.example.marvel_app.feature_character.presentation.character_detail.CharacterDetailFragment"
         android:label="CharacterDetailFragment" />
     <fragment
         android:id="@+id/favoriteCharactersFragment"
-        android:name="com.example.marvel_app.feature_character.presentation_favorite_characters.FavoriteCharactersFragment"
+        android:name="com.example.marvel_app.feature_character.presentation.favorite_characters.FavoriteCharactersFragment"
         android:label="FavoriteCharactersFragment" >
         <action
             android:id="@+id/action_favoriteCharactersFragment_to_characterDetailFragment"

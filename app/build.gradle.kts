@@ -7,6 +7,9 @@ android {
     namespace = "com.example.marvel_app"
     compileSdk = 34
 
+    dataBinding {
+        enable = true
+    }
     defaultConfig {
         applicationId = "com.example.marvel_app"
         minSdk = 24
