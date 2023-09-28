@@ -3,10 +3,27 @@ package com.example.marvel_app.feature_character.presentation.characters
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.example.marvel_app.R
+import androidx.fragment.app.viewModels
+import com.example.marvel_app.databinding.FragmentDiscoverBinding
+import com.example.marvel_app.feature_character.presentation.BaseFragment
 
-class CharactersFragment : Fragment(R.layout.fragment_discover) {
+class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
+    private val charactersViewModel: CharactersViewModel by viewModels()
+    private val adapter = CharactersListAdapter()
+
+    override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {
+        return FragmentDiscoverBinding.inflate(inflater)
+    }
+
+    override fun setupUI(view: View, savedInstanceState: Bundle?) {
+
+        binding.discoverGridRecyclerView.adapter = adapter
+
+        adapter.submitList(charactersViewModel.charactersList.value)
+
+        charactersViewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
+            adapter.submitList(characterList)
+        }
+    }
 }
