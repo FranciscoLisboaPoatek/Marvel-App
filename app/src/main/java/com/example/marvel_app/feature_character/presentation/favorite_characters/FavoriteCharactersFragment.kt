@@ -3,13 +3,13 @@ package com.example.marvel_app.feature_character.presentation.favorite_character
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
 
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
-    private val favoriteCharactersViewModel: FavoriteCharactersViewModel by viewModels()
+    private val favoriteCharactersViewModel: FavoriteCharactersViewModel by activityViewModels()
     override fun onCreateBinding(inflater: LayoutInflater): FragmentFavoritesBinding {
         return FragmentFavoritesBinding.inflate(inflater)
     }

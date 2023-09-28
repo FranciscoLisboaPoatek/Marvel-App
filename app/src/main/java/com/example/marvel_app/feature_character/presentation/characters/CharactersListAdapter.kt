@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.databinding.ListItemDiscoverBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 
-class CharactersListAdapter() :
+class CharactersListAdapter(val clickListener: CharacterClickListener) :
     ListAdapter<Character, CharactersListAdapter.CharacterViewHolder>(DiffCallback) {
 
     class CharacterViewHolder(private var binding: ListItemDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: Character) {
+        fun bind(character: Character, clickListener: CharacterClickListener) {
             binding.character = character
+            binding.clickListener = clickListener
             binding.executePendingBindings()
 
         }
@@ -39,6 +40,10 @@ class CharactersListAdapter() :
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = getItem(position)
-        holder.bind(character)
+        holder.bind(character,clickListener)
     }
+}
+
+class CharacterClickListener(val clickListener: (character: Character) -> Unit){
+    fun onClick(character: Character) = clickListener(character)
 }
