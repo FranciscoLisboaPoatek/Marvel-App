@@ -10,12 +10,13 @@ import com.example.marvel_app.feature_character.presentation.BaseFragment
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
     private val charactersViewModel: CharactersViewModel by viewModels()
+    private val adapter = CharactersListAdapter()
+
     override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {
         return FragmentDiscoverBinding.inflate(inflater)
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        val adapter = CharactersListAdapter()
 
         binding.discoverGridRecyclerView.adapter = adapter
 
