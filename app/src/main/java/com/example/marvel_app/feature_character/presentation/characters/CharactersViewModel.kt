@@ -1,20 +1,13 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.marvel_app.feature_character.domain.models.Character
+import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarViewModel
 
-class CharactersViewModel : ViewModel() {
+class CharactersViewModel : MarvelTopAppBarViewModel() {
 
     private val _charactersList = MutableLiveData<List<Character>>()
     val charactersList: MutableLiveData<List<Character>> = _charactersList
-
-    private val _isSearchBarOpen = MutableLiveData<Boolean>(false)
-    val isSearchBarOpen: MutableLiveData<Boolean> = _isSearchBarOpen
-
-    fun switchIsSearchBarOpen():Unit {
-        _isSearchBarOpen.value = !(_isSearchBarOpen.value?:true)
-    }
 
     init {
         _charactersList.value =
