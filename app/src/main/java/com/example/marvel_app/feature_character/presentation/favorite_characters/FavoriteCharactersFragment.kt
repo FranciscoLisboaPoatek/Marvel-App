@@ -10,13 +10,15 @@ import com.example.marvel_app.feature_character.presentation.BaseFragment
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     private val favoriteCharactersViewModel: FavoriteCharactersViewModel by activityViewModels()
+    private lateinit var adapter: FavoriteCharactersListAdapter
+
     override fun onCreateBinding(inflater: LayoutInflater): FragmentFavoritesBinding {
         return FragmentFavoritesBinding.inflate(inflater)
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
 
-        val adapter = FavoriteCharactersListAdapter()
+        adapter = FavoriteCharactersListAdapter()
 
         binding.favoritesRecyclerView.adapter = adapter
 

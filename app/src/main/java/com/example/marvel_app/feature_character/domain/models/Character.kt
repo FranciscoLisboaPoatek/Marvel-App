@@ -4,7 +4,7 @@ import android.os.Parcelable
 
 @Parcelize
 data class Character(
-    val id: Int,
+    val id: String,
     val imgUrl: String,
     val name: String,
     val description: String
