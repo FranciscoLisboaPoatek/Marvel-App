@@ -9,6 +9,13 @@ class CharactersViewModel : ViewModel() {
     private val _charactersList = MutableLiveData<List<Character>>()
     val charactersList: MutableLiveData<List<Character>> = _charactersList
 
+    private val _isSearchBarOpen = MutableLiveData<Boolean>(false)
+    val isSearchBarOpen: MutableLiveData<Boolean> = _isSearchBarOpen
+
+    fun switchIsSearchBarOpen():Unit {
+        _isSearchBarOpen.value = !(_isSearchBarOpen.value?:true)
+    }
+
     init {
         _charactersList.value =
             mutableListOf(
