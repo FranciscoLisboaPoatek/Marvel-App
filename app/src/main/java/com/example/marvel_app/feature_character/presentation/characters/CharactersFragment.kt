@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
-    private val charactersViewModel: CharactersViewModel by viewModels()
+    private val charactersViewModel: CharactersViewModel by activityViewModels()
     private lateinit var adapter: CharactersListAdapter
 
     override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {

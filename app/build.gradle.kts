@@ -13,6 +13,9 @@ android {
     dataBinding {
         enable = true
     }
+    viewBinding {
+        enable = true
+    }
     defaultConfig {
         applicationId = "com.example.marvel_app"
         minSdk = 24
