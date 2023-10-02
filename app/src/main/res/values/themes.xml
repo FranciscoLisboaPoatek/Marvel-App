@@ -3,6 +3,9 @@
     <style name="Base.Theme.MarvelApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Menu</item>
+        <item name="colorPrimaryDark">#811E1A</item>
+        <item name="colorPrimary">@color/marvel_red</item>
     </style>
 
     <style name="Theme.MarvelApp" parent="Base.Theme.MarvelApp" />

@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
+import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarInflater
 
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
@@ -18,6 +20,8 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        MarvelTopAppBarInflater(this, favoriteCharactersViewModel, binding.marvelTopAppBar)
+            .setupMarvelAppTopBar()
 
         adapter = FavoriteCharactersListAdapter(FavoriteCharacterClickListener { character ->
             val action =
@@ -27,7 +31,13 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
             findNavController().navigate(action)
         })
 
-        binding.favoritesRecyclerView.adapter = adapter
+        binding.apply {
+            listOrderBar.apply {
+                listOrderTypeText.text = getString(R.string.ordering_by_name)
+                listOrderAscDsc.text = getString(R.string.down_arrow)
+            }
+            favoritesRecyclerView.adapter = adapter
+        }
 
         adapter.submitList(favoriteCharactersViewModel.favoriteCharactersList.value)
 

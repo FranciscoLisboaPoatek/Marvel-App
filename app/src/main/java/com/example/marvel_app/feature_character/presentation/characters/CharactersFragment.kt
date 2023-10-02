@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
+import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarInflater
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
@@ -18,6 +20,9 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        MarvelTopAppBarInflater(this,charactersViewModel,binding.marvelTopAppBar)
+            .setupMarvelAppTopBar()
+
         adapter = CharactersListAdapter(CharacterClickListener { character ->
             val action =
                 CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment(
@@ -26,7 +31,14 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
             findNavController().navigate(action)
         })
 
-        binding.discoverGridRecyclerView.adapter = adapter
+        binding.apply {
+            listOrderBar.apply {
+                listOrderTypeText.text = getString(R.string.ordering_by_name)
+                listOrderAscDsc.text = getString(R.string.down_arrow)
+            }
+
+            discoverGridRecyclerView.adapter = adapter
+        }
 
         adapter.submitList(charactersViewModel.charactersList.value)
 
