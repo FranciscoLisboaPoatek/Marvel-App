@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
+import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarInflater
 
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
@@ -17,6 +18,8 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        MarvelTopAppBarInflater(this,favoriteCharactersViewModel,binding.marvelTopAppBar)
+            .setupMarvelAppTopBar()
 
         binding.favoritesRecyclerView.adapter = adapter
 
