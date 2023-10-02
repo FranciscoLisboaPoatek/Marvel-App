@@ -20,7 +20,9 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         adapter = CharactersListAdapter(CharacterClickListener { character ->
             val action =
-            CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment(character)
+                CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment(
+                    character
+                )
             findNavController().navigate(action)
         })
 

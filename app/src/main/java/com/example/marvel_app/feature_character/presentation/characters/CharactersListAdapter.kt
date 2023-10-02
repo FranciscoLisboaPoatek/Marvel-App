@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.databinding.ListItemDiscoverBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 
-class CharactersListAdapter(val clickListener: CharacterClickListener) :
+class CharactersListAdapter(private val clickListener: CharacterClickListener) :
     ListAdapter<Character, CharactersListAdapter.CharacterViewHolder>(DiffCallback) {
 
     class CharacterViewHolder(private var binding: ListItemDiscoverBinding) :

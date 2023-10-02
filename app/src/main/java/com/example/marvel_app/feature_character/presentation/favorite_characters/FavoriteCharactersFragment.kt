@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
 
@@ -18,7 +19,13 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
 
-        adapter = FavoriteCharactersListAdapter()
+        adapter = FavoriteCharactersListAdapter(FavoriteCharacterClickListener { character ->
+            val action =
+                FavoriteCharactersFragmentDirections.actionFavoriteCharactersFragmentToCharacterDetailFragment(
+                    character
+                )
+            findNavController().navigate(action)
+        })
 
         binding.favoritesRecyclerView.adapter = adapter
 

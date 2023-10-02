@@ -7,11 +7,16 @@
         <variable
             name="character"
             type="com.example.marvel_app.feature_character.domain.models.Character" />
+
+        <variable
+            name="clickListener"
+            type="com.example.marvel_app.feature_character.presentation.favorite_characters.FavoriteCharacterClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(character)}"
         android:padding="@dimen/list_item_padding">
 
         <com.google.android.material.imageview.ShapeableImageView
