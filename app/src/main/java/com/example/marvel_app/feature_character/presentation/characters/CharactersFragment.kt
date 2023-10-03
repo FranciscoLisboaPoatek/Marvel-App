@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
-import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarInflater
+import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarInflater
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
@@ -20,8 +20,8 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        MarvelTopAppBarInflater(this,charactersViewModel,binding.marvelTopAppBar)
-            .setupMarvelAppTopBar()
+        MarvelTopAppBarInflater(binding.marvelTopAppBar)
+            .setupMarvelAppTopBar(this,charactersViewModel)
 
         adapter = CharactersListAdapter(CharacterClickListener { character ->
             val action =

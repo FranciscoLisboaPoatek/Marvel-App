@@ -2,7 +2,7 @@ package com.example.marvel_app.feature_character.presentation.favorite_character
 
 import androidx.lifecycle.MutableLiveData
 import com.example.marvel_app.feature_character.domain.models.Character
-import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarViewModel
+import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
 
 class FavoriteCharactersViewModel : MarvelTopAppBarViewModel() {
 

@@ -1,4 +1,4 @@
-package com.example.marvel_app.feature_character.presentation
+package com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar
 
 import android.content.Context
 import android.view.View
@@ -12,15 +12,13 @@ import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.google.android.material.appbar.MaterialToolbar
 
 class MarvelTopAppBarInflater(
-    private val fragment: Fragment,
-    private val viewModel: MarvelTopAppBarViewModel,
-    private val marvelTopAppBar: ComponentMarvelTopAppBarBinding
+    marvelTopAppBar: ComponentMarvelTopAppBarBinding
 ) {
     private var marvelLogo: ImageView = marvelTopAppBar.marvelTopAppBarLogo
     private var topBar: MaterialToolbar = marvelTopAppBar.marvelTopAppBarToolbar
     private var searchBar: EditText = marvelTopAppBar.marvelTopAppBarSearchText
 
-    fun setupMarvelAppTopBar() {
+    fun setupMarvelAppTopBar(fragment: Fragment, viewModel: MarvelTopAppBarViewModel) {
         topBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.search_item -> {
@@ -33,20 +31,21 @@ class MarvelTopAppBarInflater(
         }
 
         viewModel.isSearchBarOpen.observe(fragment.viewLifecycleOwner) { isOpen ->
-            setUpSearchBar(isOpen)
+            setUpSearchBar(isOpen, fragment.requireContext())
         }
     }
 
-    private fun setUpSearchBar(isOpen: Boolean) {
+    private fun setUpSearchBar(isOpen: Boolean, context: Context) {
+
         val imm =
-            fragment.requireActivity()
+            context
                 .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val menuItem = topBar.menu.findItem(R.id.search_item)
 
         if (isOpen) {
             menuItem.icon =
-                ContextCompat.getDrawable(fragment.requireContext(), R.drawable.close_24px)
+                ContextCompat.getDrawable(context, R.drawable.close_24px)
 
             marvelLogo.visibility = View.GONE
             searchBar.visibility = View.VISIBLE
@@ -54,7 +53,7 @@ class MarvelTopAppBarInflater(
             imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT)
         } else {
             menuItem.icon =
-                ContextCompat.getDrawable(fragment.requireContext(), R.drawable.ic_search)
+                ContextCompat.getDrawable(context, R.drawable.ic_search)
 
             marvelLogo.visibility = View.VISIBLE
             searchBar.visibility = View.GONE

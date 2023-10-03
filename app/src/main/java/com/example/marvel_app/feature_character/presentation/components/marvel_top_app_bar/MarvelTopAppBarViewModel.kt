@@ -1,4 +1,4 @@
-package com.example.marvel_app.feature_character.presentation
+package com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
