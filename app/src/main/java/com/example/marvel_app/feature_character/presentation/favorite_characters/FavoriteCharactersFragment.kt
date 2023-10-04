@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
-import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarInflater
+import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarHandler
 
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
@@ -20,7 +20,7 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        MarvelTopAppBarInflater(binding.marvelTopAppBar)
+        MarvelTopAppBarHandler(binding.marvelTopAppBar)
             .setupMarvelAppTopBar(this, favoriteCharactersViewModel)
 
         adapter = FavoriteCharactersListAdapter(FavoriteCharacterClickListener { character ->

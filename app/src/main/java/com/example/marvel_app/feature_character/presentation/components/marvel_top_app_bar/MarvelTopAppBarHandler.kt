@@ -11,7 +11,7 @@ import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.google.android.material.appbar.MaterialToolbar
 
-class MarvelTopAppBarInflater(
+class MarvelTopAppBarHandler(
     marvelTopAppBar: ComponentMarvelTopAppBarBinding
 ) {
     private var marvelLogo: ImageView = marvelTopAppBar.marvelTopAppBarLogo

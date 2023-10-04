@@ -1,4 +1,4 @@
-package com.example.marvel_app.feature_character
+package com.example.marvel_app.feature_character.di
 
 import dagger.Module
 import dagger.hilt.InstallIn
