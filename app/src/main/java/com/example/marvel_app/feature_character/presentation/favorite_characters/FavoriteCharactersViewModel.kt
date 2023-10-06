@@ -7,7 +7,7 @@ import com.example.marvel_app.feature_character.presentation.components.marvel_t
 class FavoriteCharactersViewModel : MarvelTopAppBarViewModel() {
 
     private val _favoriteCharactersList = MutableLiveData<List<Character>>()
-    val favoriteCharactersList: MutableLiveData<List<Character>> = _favoriteCharactersList
+    override val charactersList: MutableLiveData<List<Character>> = _favoriteCharactersList
 
     init {
         _favoriteCharactersList.value =

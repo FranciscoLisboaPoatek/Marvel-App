@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.marvel_app.feature_character.domain.models.Character
 
 abstract class MarvelTopAppBarViewModel: ViewModel() {
+    abstract val charactersList: MutableLiveData<List<Character>>
 
     private val _isSearchBarOpen = MutableLiveData<Boolean>(false)
     val isSearchBarOpen: MutableLiveData<Boolean> = _isSearchBarOpen

@@ -7,7 +7,8 @@ import com.example.marvel_app.feature_character.presentation.components.marvel_t
 class CharactersViewModel : MarvelTopAppBarViewModel() {
 
     private val _charactersList = MutableLiveData<List<Character>>()
-    val charactersList: MutableLiveData<List<Character>> = _charactersList
+    override val charactersList: MutableLiveData<List<Character>> = _charactersList
+
 
     init {
         _charactersList.value =
