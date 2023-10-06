@@ -25,10 +25,15 @@ class CharactersViewModel : MarvelTopAppBarViewModel() {
                         "Thor has starred in several ongoing series and limited series, and appears in all volumes of the Avengers series. The character has been used in Marvel Comics merchandise, animated television series, films, video games, clothing and toys.[5][6]\n" +
                         "\n" +
                         "Chris Hemsworth portrays the character in several Marvel Cinematic Universe films: Thor (2011), The Avengers (2012), Thor: The Dark World (2013), Avengers: Age of Ultron (2015), Doctor Strange (2016, cameo), Thor: Ragnarok (2017), Avengers: Infinity War (2018), Avengers: Endgame (2019), and Thor: Love and Thunder (2022). Alternative versions of the character appear in the Disney+ series What If...? (2021)."),
-                Character("1", "", "Iron Man", ""),
-                Character("1", "", "Iron Man", ""),
-                Character("1", "", "Iron Man", ""),
-                Character("1", "", "Iron Man", ""),
+                Character("4", "", "Iron Man", ""),
+                Character("5", "", "Captain America", ""),
+                Character("6", "", "Iron Man", ""),
+                Character("7", "", "Iron Man", ""),
+            )
+
+        _searchedCharacters.value = listOf(
+            Character("5", "", "Captain America", ""),
+
             )
     }
 }

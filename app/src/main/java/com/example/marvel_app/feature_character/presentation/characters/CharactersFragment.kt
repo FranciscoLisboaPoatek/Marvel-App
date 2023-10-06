@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
-import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarInflater
+import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarHandler
 
 class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
 
@@ -20,8 +20,8 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        MarvelTopAppBarInflater(binding.marvelTopAppBar)
-            .setupMarvelAppTopBar(this,charactersViewModel)
+        val marvelTopAppBarHandler = MarvelTopAppBarHandler(binding.marvelTopAppBar)
+        marvelTopAppBarHandler.setupMarvelAppTopBar(charactersViewModel)
 
         adapter = CharactersListAdapter(CharacterClickListener { character ->
             val action =
@@ -40,10 +40,26 @@ class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
             discoverGridRecyclerView.adapter = adapter
         }
 
-        adapter.submitList(charactersViewModel.charactersList.value)
-
         charactersViewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
             adapter.submitList(characterList)
+            binding.discoverGridRecyclerView.visibility = if (characterList.isEmpty()) View.GONE else View.VISIBLE
+
+        }
+
+        charactersViewModel.searchedCharacters.observe(viewLifecycleOwner){searchedCharactersList ->
+            if (charactersViewModel.isSearchBarOpen.value == true) {
+                adapter.submitList(searchedCharactersList)
+
+            }
+        }
+
+        charactersViewModel.isSearchBarOpen.observe(viewLifecycleOwner) { isSearchBarOpen ->
+            marvelTopAppBarHandler.setUpSearchBar(isSearchBarOpen, this.requireContext())
+            if (isSearchBarOpen) {
+                adapter.submitList(charactersViewModel.searchedCharacters.value)
+            } else {
+                adapter.submitList(charactersViewModel.charactersList.value)
+            }
         }
     }
 }

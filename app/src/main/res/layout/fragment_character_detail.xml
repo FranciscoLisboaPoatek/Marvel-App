@@ -27,6 +27,8 @@
                 app:expandedTitleTextColor="@android:color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="@{character.name}"
+                app:expandedTitleMarginBottom="35dp"
+                app:expandedTitleTextAppearance="@style/Toolbar.TitleText"
                 app:toolbarId="@id/toolbar">
 
                 <ImageView
@@ -40,12 +42,12 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/character_detail_img_shadow_top" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:background="@drawable/character_detail_img_shadow_bottom" />
 

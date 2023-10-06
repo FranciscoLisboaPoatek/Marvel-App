@@ -6,19 +6,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.google.android.material.appbar.MaterialToolbar
 
-class MarvelTopAppBarInflater(
+class MarvelTopAppBarHandler(
     marvelTopAppBar: ComponentMarvelTopAppBarBinding
 ) {
     private var marvelLogo: ImageView = marvelTopAppBar.marvelTopAppBarLogo
     private var topBar: MaterialToolbar = marvelTopAppBar.marvelTopAppBarToolbar
     private var searchBar: EditText = marvelTopAppBar.marvelTopAppBarSearchText
 
-    fun setupMarvelAppTopBar(fragment: Fragment, viewModel: MarvelTopAppBarViewModel) {
+    fun setupMarvelAppTopBar(viewModel: MarvelTopAppBarViewModel) {
         topBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.search_item -> {
@@ -29,13 +28,9 @@ class MarvelTopAppBarInflater(
                 else -> false
             }
         }
-
-        viewModel.isSearchBarOpen.observe(fragment.viewLifecycleOwner) { isOpen ->
-            setUpSearchBar(isOpen, fragment.requireContext())
-        }
     }
 
-    private fun setUpSearchBar(isOpen: Boolean, context: Context) {
+    fun setUpSearchBar(isOpen: Boolean, context: Context) {
 
         val imm =
             context

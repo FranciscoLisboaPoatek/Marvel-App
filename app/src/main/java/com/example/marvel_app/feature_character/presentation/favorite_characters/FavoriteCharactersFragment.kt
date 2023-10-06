@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.BaseFragment
-import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarInflater
+import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarHandler
 
 class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
 
@@ -20,8 +20,8 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        MarvelTopAppBarInflater(binding.marvelTopAppBar)
-            .setupMarvelAppTopBar(this, favoriteCharactersViewModel)
+        val marvelTopAppBarHandler = MarvelTopAppBarHandler(binding.marvelTopAppBar)
+        marvelTopAppBarHandler.setupMarvelAppTopBar(favoriteCharactersViewModel)
 
         adapter = FavoriteCharactersListAdapter(FavoriteCharacterClickListener { character ->
             val action =
@@ -39,10 +39,25 @@ class FavoriteCharactersFragment : BaseFragment<FragmentFavoritesBinding>() {
             favoritesRecyclerView.adapter = adapter
         }
 
-        adapter.submitList(favoriteCharactersViewModel.favoriteCharactersList.value)
-
         favoriteCharactersViewModel.favoriteCharactersList.observe(viewLifecycleOwner) { favoriteCharactersList ->
             adapter.submitList(favoriteCharactersList)
+            binding.noFavoritesMessage.visibility = if(favoriteCharactersList.isEmpty()) View.VISIBLE else View.GONE
         }
+
+        if (favoriteCharactersViewModel.isSearchBarOpen.value == true) {
+            adapter.submitList(favoriteCharactersViewModel.searchedCharacters.value)
+        }
+
+        favoriteCharactersViewModel.isSearchBarOpen.observe(viewLifecycleOwner) {isSearchBarOpen ->
+            marvelTopAppBarHandler.setUpSearchBar(isSearchBarOpen, this.requireContext())
+            if (isSearchBarOpen) {
+                adapter.submitList(favoriteCharactersViewModel.searchedCharacters.value)
+            } else {
+                adapter.submitList(favoriteCharactersViewModel.favoriteCharactersList.value)
+
+            }
+        }
+
+
     }
 }
