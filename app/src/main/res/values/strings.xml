@@ -12,4 +12,6 @@ Vestibulum congue pretium mauris bibendum fermentum. Duis nunc leo, hendrerit ut
     <string name="ordering_by_name">Ordering by name</string>
     <string name="up_arrow">↑</string>
     <string name="down_arrow">↓</string>
+    <string name="no_search_results_found">No results found!</string>
+    <string name="no_favorites_saved">No favorites saved!</string>
 </resources>

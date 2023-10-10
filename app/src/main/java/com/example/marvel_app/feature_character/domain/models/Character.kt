@@ -7,5 +7,6 @@ data class Character(
     val id: String,
     val imgUrl: String,
     val name: String,
-    val description: String
+    val description: String,
+    var isFavorited: Boolean = false
 ) : Parcelable

@@ -41,7 +41,7 @@
             android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="@id/list_item_discover_character_image_view"
             app:layout_constraintTop_toTopOf="@id/list_item_discover_character_image_view"
-            tools:src="@drawable/ic_favorite_checked" />
+            android:src="@drawable/ic_favorite_unchecked" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list_item_discover_name_layout"

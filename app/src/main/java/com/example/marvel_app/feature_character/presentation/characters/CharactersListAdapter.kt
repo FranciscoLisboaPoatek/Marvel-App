@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ListItemDiscoverBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 
@@ -16,8 +17,20 @@ class CharactersListAdapter(private val clickListener: CharacterClickListener) :
         fun bind(character: Character, clickListener: CharacterClickListener) {
             binding.character = character
             binding.clickListener = clickListener
+            setFavoriteIcon(character)
+            binding.listItemDiscoverFavoriteIcon.setOnClickListener{
+                character.isFavorited = !(character.isFavorited)
+                setFavoriteIcon(character)
+            }
             binding.executePendingBindings()
 
+        }
+        private fun setFavoriteIcon(character: Character){
+            if(character.isFavorited){
+                binding.listItemDiscoverFavoriteIcon.setImageResource(R.drawable.ic_favorite_checked)
+            } else {
+                binding.listItemDiscoverFavoriteIcon.setImageResource(R.drawable.ic_favorite_unchecked)
+            }
         }
     }
 

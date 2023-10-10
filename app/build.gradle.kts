@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs")
     id("kotlin-parcelize")
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android") version "2.46.1"
 
 }
@@ -18,6 +18,9 @@ android {
     viewBinding {
         enable = true
     }
+    buildFeatures{
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.example.marvel_app"
         minSdk = 24
@@ -26,6 +29,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_PUBLIC_KEY", "\"d213144dd08baa1d8e0c8a0fd77ef81a\"")
+        buildConfigField("String", "API_PRIVATE_KEY", "\"2b4917b4e5b6df792051156082466449db821ab0\"")
+        buildConfigField("String", "MARVEL_BASE_URL", "\"https://gateway.marvel.com\"")
     }
 
     buildTypes {
@@ -61,6 +68,13 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
+
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 
 }
 
