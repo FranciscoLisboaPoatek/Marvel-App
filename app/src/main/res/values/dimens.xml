@@ -15,4 +15,6 @@
     <dimen name="list_item_name_min_font_size">11sp</dimen>
     <dimen name="list_item_discover_character_image_view_height">240dp</dimen>
     <dimen name="list_item_favorite_character_image_view_height">204dp</dimen>
+
+    <dimen name="user_message_font_size">16sp</dimen>
 </resources>

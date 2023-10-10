@@ -40,11 +40,12 @@
             app:spanCount="2"
             tools:listitem="@layout/list_item_discover" />
 
-        <ImageView
+        <ProgressBar
             android:id="@+id/status_image"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:src="@drawable/animated_circular_progress_indicator"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:indeterminateTint="@color/white"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -55,11 +56,12 @@
         <TextView
             android:id="@+id/no_search_result_message"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="150dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_bias="0.25"
             android:text="@string/no_search_results_found"
             android:textColor="@color/white"
             android:visibility="gone"
+            android:textSize="@dimen/user_message_font_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
