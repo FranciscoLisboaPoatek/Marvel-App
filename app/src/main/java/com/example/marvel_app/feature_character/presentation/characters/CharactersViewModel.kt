@@ -28,7 +28,7 @@ class CharactersViewModel @Inject constructor(
             )
     }
 
-    private fun setCharactersList(offset: Int) {
+    fun setCharactersList(offset: Int) {
         viewModelScope.launch {
             _charactersList.value =
                 _charactersList.value?.plus(charactersListUseCase.execute(offset))

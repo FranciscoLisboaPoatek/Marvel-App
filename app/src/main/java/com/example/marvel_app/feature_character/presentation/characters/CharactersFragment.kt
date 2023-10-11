@@ -1,11 +1,11 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
@@ -24,7 +24,7 @@ class CharactersFragment :
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        Log.w("List item count",adapter.itemCount.toString())
+        setRecyclerViewScrollListener()
         marvelTopAppBar = binding.marvelTopAppBar
         setupMarvelAppTopBar()
 
@@ -33,6 +33,19 @@ class CharactersFragment :
         binding.discoverGridRecyclerView.adapter = adapter
 
         observeCharactersList()
+    }
+
+    private fun setRecyclerViewScrollListener() {
+        binding.discoverGridRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.discoverGridRecyclerView.canScrollVertically(1)) {
+                    viewModel.setCharactersList(adapter.itemCount)
+                }
+            }
+
+        })
     }
 
     private fun setOrderBarTex(typeOfOrder: String, ascendingOrDescending: String) {
@@ -58,7 +71,6 @@ class CharactersFragment :
                 adapter.submitList(characterList)
                 binding.discoverGridRecyclerView.visibility =
                     if (characterList.isEmpty()) View.GONE else View.VISIBLE
-                Log.w("List item count",adapter.itemCount.toString())
 
             }
         }
