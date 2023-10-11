@@ -5,18 +5,32 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ListItemDiscoverBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 
-class CharactersListAdapter() :
+class CharactersListAdapter(private val clickListener: CharacterClickListener) :
     ListAdapter<Character, CharactersListAdapter.CharacterViewHolder>(DiffCallback) {
 
     class CharacterViewHolder(private var binding: ListItemDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: Character) {
+        fun bind(character: Character, clickListener: CharacterClickListener) {
             binding.character = character
+            binding.clickListener = clickListener
+            setFavoriteIcon(character)
+            binding.listItemDiscoverFavoriteIcon.setOnClickListener{
+                character.isFavorited = !(character.isFavorited)
+                setFavoriteIcon(character)
+            }
             binding.executePendingBindings()
 
+        }
+        private fun setFavoriteIcon(character: Character){
+            if(character.isFavorited){
+                binding.listItemDiscoverFavoriteIcon.setImageResource(R.drawable.ic_favorite_checked)
+            } else {
+                binding.listItemDiscoverFavoriteIcon.setImageResource(R.drawable.ic_favorite_unchecked)
+            }
         }
     }
 
@@ -39,6 +53,10 @@ class CharactersListAdapter() :
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = getItem(position)
-        holder.bind(character)
+        holder.bind(character,clickListener)
     }
+}
+
+class CharacterClickListener(val clickListener: (character: Character) -> Unit){
+    fun onClick(character: Character) = clickListener(character)
 }

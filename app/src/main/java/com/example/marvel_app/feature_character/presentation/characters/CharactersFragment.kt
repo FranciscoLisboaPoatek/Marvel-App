@@ -3,40 +3,60 @@ package com.example.marvel_app.feature_character.presentation.characters
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.marvel_app.R
+import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
-import com.example.marvel_app.feature_character.presentation.BaseFragment
-import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarInflater
+import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 
-class CharactersFragment : BaseFragment<FragmentDiscoverBinding>() {
+class CharactersFragment :
+    MarvelTopAppBarBaseFragment<FragmentDiscoverBinding, CharactersListAdapter.CharacterViewHolder>() {
 
-    private val charactersViewModel: CharactersViewModel by viewModels()
-    private val adapter = CharactersListAdapter()
+    override lateinit var marvelTopAppBar: ComponentMarvelTopAppBarBinding
+    override val viewModel: CharactersViewModel by activityViewModels()
+    override val adapter by lazy { createCharacterListAdapter() }
+
 
     override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {
         return FragmentDiscoverBinding.inflate(inflater)
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        MarvelTopAppBarInflater(this,charactersViewModel,binding.marvelTopAppBar)
-            .setupMarvelAppTopBar()
+        marvelTopAppBar = binding.marvelTopAppBar
+        setupMarvelAppTopBar()
 
-        binding.apply {
-            listOrderBar.apply {
-                listOrderTypeText.text = getString(R.string.ordering_by_name)
-                listOrderAscDsc.text = getString(R.string.down_arrow)
-            }
+        setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
-            discoverGridRecyclerView.adapter = adapter
-        }
+        binding.discoverGridRecyclerView.adapter = adapter
 
-        adapter.submitList(charactersViewModel.charactersList.value)
-
-        charactersViewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
-            adapter.submitList(characterList)
-        }
-
+        observeCharactersList()
     }
 
+    private fun setOrderBarTex(typeOfOrder: String, ascendingOrDescending: String) {
+        binding.listOrderBar.apply {
+            listOrderTypeText.text = typeOfOrder
+            listOrderAscDsc.text = ascendingOrDescending
+        }
+    }
+
+    private fun createCharacterListAdapter(): CharactersListAdapter {
+        return CharactersListAdapter(CharacterClickListener { character ->
+            val action =
+                CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailFragment(
+                    character
+                )
+            findNavController().navigate(action)
+        })
+    }
+
+    private fun observeCharactersList() {
+        viewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
+            if (viewModel.isSearchBarOpen.value == false) {
+                adapter.submitList(characterList)
+                binding.discoverGridRecyclerView.visibility =
+                    if (characterList.isEmpty()) View.GONE else View.VISIBLE
+            }
+        }
+    }
 }

@@ -8,16 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.databinding.ListItemFavoriteBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 
-class FavoriteCharactersListAdapter():
-    ListAdapter<Character, FavoriteCharactersListAdapter.FavoriteCharacterViewHolder>(DiffCallback){
+class FavoriteCharactersListAdapter(private val clickListener: FavoriteCharacterClickListener) :
+    ListAdapter<Character, FavoriteCharactersListAdapter.FavoriteCharacterViewHolder>(DiffCallback) {
 
-    class FavoriteCharacterViewHolder (private var binding: ListItemFavoriteBinding):
-        RecyclerView.ViewHolder(binding.root){
-            fun bind(character: Character){
-                binding.character = character
-                binding.executePendingBindings()
-            }
+    class FavoriteCharacterViewHolder(private var binding: ListItemFavoriteBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(character: Character, clickListener: FavoriteCharacterClickListener) {
+            binding.character = character
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
+    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Character>() {
         override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
@@ -32,12 +33,16 @@ class FavoriteCharactersListAdapter():
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteCharacterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return FavoriteCharacterViewHolder(
-            ListItemFavoriteBinding.inflate(layoutInflater,parent,false)
+            ListItemFavoriteBinding.inflate(layoutInflater, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: FavoriteCharacterViewHolder, position: Int) {
         val character = getItem(position)
-        holder.bind(character)
+        holder.bind(character, clickListener)
     }
+}
+
+class FavoriteCharacterClickListener(val clickListener: (character: Character) -> Unit) {
+    fun onClick(character: Character) = clickListener(character)
 }

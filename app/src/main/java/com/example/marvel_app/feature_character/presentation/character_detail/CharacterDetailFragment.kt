@@ -1,7 +1,61 @@
 package com.example.marvel_app.feature_character.presentation.character_detail
 
-import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.marvel_app.R
+import com.example.marvel_app.databinding.FragmentCharacterDetailBinding
+import com.example.marvel_app.feature_character.domain.models.Character
+import com.example.marvel_app.feature_character.presentation.BaseFragment
 
-class CharacterDetailFragment : Fragment(R.layout.fragment_character_detail) {
+class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
+
+    private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
+
+    private val args: CharacterDetailFragmentArgs by navArgs()
+    private lateinit var favoriteMenuItem: MenuItem
+    override fun onCreateBinding(inflater: LayoutInflater): FragmentCharacterDetailBinding {
+        return FragmentCharacterDetailBinding.inflate(inflater)
+    }
+
+    override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        binding.lifecycleOwner = this
+        characterDetailViewModel.onCharacterClicked(args.character)
+        binding.character = characterDetailViewModel.character.value
+
+        val character = binding.character
+        val navHostFragment = findNavController()
+        val toolbar = binding.toolbar
+        favoriteMenuItem = toolbar.menu.findItem(R.id.favorite_item)
+
+        if (character != null) {
+
+            setCharacretFavorited(character)
+
+            favoriteMenuItem.setOnMenuItemClickListener {
+                character.isFavorited = !(character.isFavorited)
+                setCharacretFavorited(character)
+                true
+            }
+        }
+        val appBarConfiguration = AppBarConfiguration(navHostFragment.graph)
+        toolbar.setupWithNavController(navHostFragment, appBarConfiguration)
+        toolbar.setNavigationIcon(R.drawable.arrow_back_24px)
+
+    }
+
+    private fun setCharacretFavorited(character: Character){
+        if (character.isFavorited) {
+            favoriteMenuItem.icon = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star_filled)
+        } else {
+            favoriteMenuItem.icon = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star)
+        }
+    }
 }

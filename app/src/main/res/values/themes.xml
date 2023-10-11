@@ -4,12 +4,18 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Menu</item>
+        <item name="colorPrimaryDark">#811E1A</item>
+        <item name="colorPrimary">@color/marvel_red</item>
     </style>
 
     <style name="Theme.MarvelApp" parent="Base.Theme.MarvelApp" />
 
-    Copy code
     <style name="BottomNavigationIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">#80E3E3E3</item>
+    </style>
+    
+    <style name="Toolbar.TitleText" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">26sp</item>
     </style>
 </resources>
