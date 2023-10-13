@@ -3,12 +3,14 @@ package com.example.marvel_app.feature_character.presentation.characters
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
+import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 
 class CharactersFragment :
@@ -17,30 +19,34 @@ class CharactersFragment :
     override lateinit var marvelTopAppBar: ComponentMarvelTopAppBarBinding
     override val viewModel: CharactersViewModel by activityViewModels()
     override val adapter by lazy { createCharacterListAdapter() }
-
+    private lateinit var discoverRecyclerView: RecyclerView
+    private lateinit var statusView: ProgressBar
 
     override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {
         return FragmentDiscoverBinding.inflate(inflater)
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        setRecyclerViewScrollListener()
+        discoverRecyclerView = binding.discoverGridRecyclerView
+        statusView = binding.statusImage
         marvelTopAppBar = binding.marvelTopAppBar
+        setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
 
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
-        binding.discoverGridRecyclerView.adapter = adapter
+        discoverRecyclerView.adapter = adapter
 
         observeCharactersList()
+        observeStatus()
     }
 
     private fun setRecyclerViewScrollListener() {
-        binding.discoverGridRecyclerView.addOnScrollListener(object :
+        discoverRecyclerView.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!binding.discoverGridRecyclerView.canScrollVertically(1)) {
+                if (!discoverRecyclerView.canScrollVertically(1)) {
                     viewModel.setCharactersList(adapter.itemCount)
                 }
             }
@@ -69,10 +75,29 @@ class CharactersFragment :
         viewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
             if (viewModel.isSearchBarOpen.value == false) {
                 adapter.submitList(characterList)
-                binding.discoverGridRecyclerView.visibility =
+                discoverRecyclerView.visibility =
                     if (characterList.isEmpty()) View.GONE else View.VISIBLE
 
             }
+        }
+    }
+
+    private fun observeStatus(){
+        viewModel.status.observe(viewLifecycleOwner){status ->
+            when(status){
+                ListStatus.LOADING -> {
+                    statusView.visibility = View.VISIBLE
+                    discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
+                }
+                ListStatus.DONE -> {
+                    statusView.visibility = View.GONE
+                }
+                ListStatus.ERROR -> {
+
+                }
+                else -> {}
+            }
+
         }
     }
 }

@@ -5,7 +5,8 @@ import android.os.Parcelable
 @Parcelize
 data class Character(
     val id: String,
-    val imgUrl: String,
+    val imgPath: String,
+    val imgExtension: String,
     val name: String,
     val description: String,
     var isFavorited: Boolean = false
