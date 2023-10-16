@@ -3,6 +3,7 @@ package com.example.marvel_app.feature_character.presentation
 import android.widget.ImageView
 import androidx.core.net.toUri
 import coil.load
+import com.example.marvel_app.R
 
 enum class ImageType { DISCOVER, FAVORITE, DETAIL }
 
@@ -18,7 +19,7 @@ fun makeImageUrl(imgPath: String, imgExtension: String, imgType: ImageType): Str
         }
 
         ImageType.DETAIL -> {
-            "${imgPath}/landscape_incredible.${imgExtension}"
+            "${imgPath}/standard_incredible.${imgExtension}"
 
         }
     }

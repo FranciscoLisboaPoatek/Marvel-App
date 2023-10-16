@@ -42,7 +42,6 @@ object FeatureCharacterModule {
                 val timestamp = System.currentTimeMillis()
                 val apiKey = API_PUBLIC_KEY
 
-                // Generate the hash
                 val hash = generateHash("$timestamp$API_PRIVATE_KEY$API_PUBLIC_KEY")
 
                 val newUrl = originalUrl.newBuilder()

@@ -14,6 +14,9 @@ import com.example.marvel_app.R
 import com.example.marvel_app.databinding.FragmentCharacterDetailBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.presentation.BaseFragment
+import com.example.marvel_app.feature_character.presentation.ImageType
+import com.example.marvel_app.feature_character.presentation.bindImage
+import com.example.marvel_app.feature_character.presentation.makeImageUrl
 
 class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
@@ -29,7 +32,6 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
         binding.lifecycleOwner = this
         characterDetailViewModel.onCharacterClicked(args.character)
         binding.character = characterDetailViewModel.character.value
-
         val character = binding.character
         val navHostFragment = findNavController()
         val toolbar = binding.toolbar
@@ -37,11 +39,20 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
         if (character != null) {
 
-            setCharacretFavorited(character)
+            bindImage(
+                binding.characterDetailImageView,
+                makeImageUrl(
+                    character.imgPath,
+                    character.imgExtension,
+                    ImageType.DETAIL
+                )
+            )
+
+            setCharacterFavorited(character)
 
             favoriteMenuItem.setOnMenuItemClickListener {
                 character.isFavorited = !(character.isFavorited)
-                setCharacretFavorited(character)
+                setCharacterFavorited(character)
                 true
             }
         }
@@ -51,11 +62,13 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     }
 
-    private fun setCharacretFavorited(character: Character){
+    private fun setCharacterFavorited(character: Character) {
         if (character.isFavorited) {
-            favoriteMenuItem.icon = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star_filled)
+            favoriteMenuItem.icon =
+                ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star_filled)
         } else {
-            favoriteMenuItem.icon = ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star)
+            favoriteMenuItem.icon =
+                ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star)
         }
     }
 }
