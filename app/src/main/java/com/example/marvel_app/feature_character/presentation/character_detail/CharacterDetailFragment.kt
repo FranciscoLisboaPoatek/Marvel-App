@@ -22,7 +22,6 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
 
-    private val args: CharacterDetailFragmentArgs by navArgs()
     private lateinit var favoriteMenuItem: MenuItem
     override fun onCreateBinding(inflater: LayoutInflater): FragmentCharacterDetailBinding {
         return FragmentCharacterDetailBinding.inflate(inflater)
@@ -30,7 +29,6 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = this
-        characterDetailViewModel.onCharacterClicked(args.character)
         binding.character = characterDetailViewModel.character.value
         val character = binding.character
         val navHostFragment = findNavController()
