@@ -6,7 +6,7 @@ import com.example.marvel_app.feature_character.domain.repository.CharacterRepos
 class CharactersListUseCase (
     private val repository: CharacterRepository
 ){
-    suspend fun execute(offset:Int): List<Character>{
-        return repository.getDiscoverCharactersList(offset)
+    suspend fun execute(offset:Int, name:String?): List<Character>{
+        return repository.getDiscoverCharactersList(offset,name)
     }
 }

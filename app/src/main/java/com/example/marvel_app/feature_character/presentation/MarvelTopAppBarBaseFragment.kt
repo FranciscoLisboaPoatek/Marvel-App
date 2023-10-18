@@ -1,7 +1,13 @@
 package com.example.marvel_app.feature_character.presentation
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.text.method.KeyListener
+import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.View.OnKeyListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -19,6 +25,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
     abstract val viewModel: MarvelTopAppBarViewModel
     abstract val adapter:ListAdapter<Character, VH>
 
+
     fun setupMarvelAppTopBar() {
         marvelTopAppBar.marvelTopAppBarToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -30,6 +37,21 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
                 else -> false
             }
         }
+
+        marvelTopAppBar.marvelTopAppBarSearchText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.searchCharacters(0,marvelTopAppBar.marvelTopAppBarSearchText.text.toString())
+            }
+
+        })
+
+
         setUpSearchBar()
         observeSearchBar()
         observeSearchedCharacterList()

@@ -22,14 +22,14 @@ class CharactersViewModel @Inject constructor(
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
 
+    private var _listEnded:Boolean = false
+    val listEnded get() = _listEnded
+
 
     init {
         setCharactersList(0)
 
-        _searchedCharacters.value = listOf(
-            Character("5", "","", "Captain America", ""),
-
-            )
+        _searchedCharacters.value = listOf()
     }
 
     fun setCharactersList(offset: Int) {
@@ -37,11 +37,33 @@ class CharactersViewModel @Inject constructor(
             _status.value = ListStatus.LOADING
             try {
                 _charactersList.value =
-                    _charactersList.value?.plus(charactersListUseCase.execute(offset))
+                    _charactersList.value?.plus(charactersListUseCase.execute(offset,null))
                 _status.value = ListStatus.DONE
             }catch (ex: Exception){
                 _status.value = ListStatus.ERROR
             }
         }
     }
+
+    override fun searchCharacters(offset: Int,name: String) {
+        viewModelScope.launch {
+            _status.value = ListStatus.LOADING
+            try {
+                val requestList = charactersListUseCase.execute(offset, name)
+                _listEnded = requestList.isEmpty()
+                if (offset == 0) {
+                    _searchedCharacters.value = requestList
+
+                }else {
+                    _searchedCharacters.value =
+                        _searchedCharacters.value?.plus(requestList)
+                }
+                _status.value = ListStatus.DONE
+
+            }catch (ex: Exception){
+                _status.value = ListStatus.ERROR
+            }
+        }    }
+
+
 }

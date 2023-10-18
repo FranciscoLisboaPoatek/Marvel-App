@@ -17,4 +17,5 @@ abstract class MarvelTopAppBarViewModel: ViewModel() {
     fun switchIsSearchBarOpen() {
         _isSearchBarOpen.value = !(_isSearchBarOpen.value?:true)
     }
+    abstract fun searchCharacters(offset: Int,name:String)
 }

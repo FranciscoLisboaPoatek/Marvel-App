@@ -9,8 +9,8 @@ import javax.inject.Inject
 class CharacterRepositoryImpl @Inject constructor(
     private val characterApi: CharacterApi
 ) : CharacterRepository{
-    override suspend fun getDiscoverCharactersList(offset:Int): List<Character> {
-        return characterApi.getCharacters(offset).data.results.map {
+    override suspend fun getDiscoverCharactersList(offset:Int,name: String?): List<Character> {
+        return characterApi.getCharacters(offset, name).data.results.map {
             CharacterMapper.characterApiDTOtoCharacter(it)
         }
     }

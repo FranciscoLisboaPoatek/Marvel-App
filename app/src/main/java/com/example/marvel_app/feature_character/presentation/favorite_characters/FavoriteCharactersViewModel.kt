@@ -8,6 +8,9 @@ class FavoriteCharactersViewModel : MarvelTopAppBarViewModel() {
 
     private val _favoriteCharactersList = MutableLiveData<List<Character>>()
     override val charactersList: MutableLiveData<List<Character>> = _favoriteCharactersList
+    override fun searchCharacters(offset: Int, name: String) {
+        TODO("Not yet implemented")
+    }
 
     init {
         _favoriteCharactersList.value =

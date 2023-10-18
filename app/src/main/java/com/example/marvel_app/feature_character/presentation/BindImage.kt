@@ -29,7 +29,9 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let{
         val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
 
-        imgView.load(imgUri)
+        imgView.load(imgUri){
+            placeholder(R.drawable.loading_animation)
+        }
     }
 }
 

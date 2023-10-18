@@ -1,6 +1,7 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -46,8 +47,14 @@ class CharactersFragment :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!discoverRecyclerView.canScrollVertically(1)) {
-                    viewModel.setCharactersList(adapter.itemCount)
+                if (!discoverRecyclerView.canScrollVertically(1) && !viewModel.listEnded) {
+                    if (viewModel.isSearchBarOpen.value == false) {
+                        viewModel.setCharactersList(adapter.itemCount)
+                    } else{
+                        viewModel.searchCharacters(adapter.itemCount,marvelTopAppBar.marvelTopAppBarSearchText.text.toString())
+                    }
+                    discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
+
                 }
             }
 
@@ -82,19 +89,21 @@ class CharactersFragment :
         }
     }
 
-    private fun observeStatus(){
-        viewModel.status.observe(viewLifecycleOwner){status ->
-            when(status){
+    private fun observeStatus() {
+        viewModel.status.observe(viewLifecycleOwner) { status ->
+            when (status) {
                 ListStatus.LOADING -> {
                     statusView.visibility = View.VISIBLE
-                    discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
                 }
+
                 ListStatus.DONE -> {
-                    statusView.visibility = View.GONE
+                   statusView.visibility = View.GONE
                 }
+
                 ListStatus.ERROR -> {
 
                 }
+
                 else -> {}
             }
 
