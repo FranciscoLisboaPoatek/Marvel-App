@@ -59,4 +59,8 @@ class FavoriteCharactersFragment :
             }
         }
     }
+
+    override fun showNoResultsFound(found: Boolean) {
+
+    }
 }

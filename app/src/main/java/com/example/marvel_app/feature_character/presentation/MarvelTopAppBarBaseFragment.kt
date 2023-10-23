@@ -1,13 +1,9 @@
 package com.example.marvel_app.feature_character.presentation
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
-import android.text.method.KeyListener
-import android.util.Log
-import android.view.KeyEvent
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import android.view.View.OnKeyListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -20,17 +16,32 @@ import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
 
-abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.ViewHolder>:BaseFragment<B>() {
+abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.ViewHolder> :
+    BaseFragment<B>() {
     abstract val marvelTopAppBar: ComponentMarvelTopAppBarBinding
     abstract val viewModel: MarvelTopAppBarViewModel
-    abstract val adapter:ListAdapter<Character, VH>
+    abstract val adapter: ListAdapter<Character, VH>
 
+    private val searchRunnable = Runnable {
+        viewModel.searchText.value?.let { viewModel.searchCharacters(0, it) }
+    }
+    private val handler = Handler(Looper.getMainLooper())
 
     fun setupMarvelAppTopBar() {
         marvelTopAppBar.marvelTopAppBarToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.search_item -> {
                     viewModel.switchIsSearchBarOpen()
+                    if(viewModel.isSearchBarOpen.value == true) {
+                        val imm = this.requireContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.showSoftInput(
+                            marvelTopAppBar.marvelTopAppBarSearchText,
+                            InputMethodManager.SHOW_IMPLICIT
+                        )
+
+
+                    }
                     true
                 }
 
@@ -38,22 +49,9 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
             }
         }
 
-        marvelTopAppBar.marvelTopAppBarSearchText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                viewModel.searchCharacters(0,marvelTopAppBar.marvelTopAppBarSearchText.text.toString())
-            }
-
-        })
-
-
         setUpSearchBar()
         observeSearchBar()
+        observeSearchText()
         observeSearchedCharacterList()
     }
 
@@ -71,15 +69,14 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
         if (isOpen == true) {
             menuItem.icon =
                 ContextCompat.getDrawable(context, R.drawable.close_24px)
-
+            viewModel.foundSearchResults.value?.let { showNoResultsFound(!it) }
             marvelLogo.visibility = View.GONE
             searchBar.visibility = View.VISIBLE
             searchBar.requestFocus()
-            imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT)
         } else {
             menuItem.icon =
                 ContextCompat.getDrawable(context, R.drawable.ic_search)
-
+            showNoResultsFound(false)
             marvelLogo.visibility = View.VISIBLE
             searchBar.visibility = View.GONE
             imm.hideSoftInputFromWindow(searchBar.windowToken, 0)
@@ -92,8 +89,12 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
                 adapter.submitList(searchedCharactersList)
             }
         }
+        viewModel.foundSearchResults.observe(viewLifecycleOwner) { foundSearchResults ->
+            showNoResultsFound(!foundSearchResults)
+        }
     }
 
+    abstract fun showNoResultsFound(notFound: Boolean)
     private fun observeSearchBar() {
         viewModel.isSearchBarOpen.observe(viewLifecycleOwner) { isSearchBarOpen ->
             setUpSearchBar()
@@ -104,4 +105,20 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding,VH : RecyclerView.Vie
             }
         }
     }
+
+    private fun observeSearchText() {
+
+        viewModel.searchText.observe(viewLifecycleOwner) { searchText ->
+            if (searchText.isBlank() || searchText == viewModel.oldSearchText) return@observe
+            viewModel.setOldText(searchText)
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, 1000)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        handler.removeCallbacks(searchRunnable)
+    }
+
 }

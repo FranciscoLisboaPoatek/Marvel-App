@@ -1,5 +1,6 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,9 +23,8 @@ class CharactersViewModel @Inject constructor(
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
 
-    private var _listEnded:Boolean = false
-    val listEnded get() = _listEnded
-
+    private var _charactersListEnded:Boolean = false
+    val charactersListEnded get() = _charactersListEnded
 
     init {
         setCharactersList(0)
@@ -36,8 +36,11 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
+                val characterListResponse = charactersListUseCase.execute(offset,null)
+
+                _charactersListEnded = characterListResponse.listEnded
                 _charactersList.value =
-                    _charactersList.value?.plus(charactersListUseCase.execute(offset,null))
+                    _charactersList.value?.plus(characterListResponse.charactersList)
                 _status.value = ListStatus.DONE
             }catch (ex: Exception){
                 _status.value = ListStatus.ERROR
@@ -49,14 +52,16 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val requestList = charactersListUseCase.execute(offset, name)
-                _listEnded = requestList.isEmpty()
+                val characterListResponse = charactersListUseCase.execute(offset, name)
+
+                _searchedCharactersListEnded = characterListResponse.listEnded
                 if (offset == 0) {
-                    _searchedCharacters.value = requestList
+                    _searchedCharacters.value = characterListResponse.charactersList
+                    _foundSearchResults.value = characterListResponse.charactersList.isNotEmpty()
 
                 }else {
                     _searchedCharacters.value =
-                        _searchedCharacters.value?.plus(requestList)
+                        _searchedCharacters.value?.plus(characterListResponse.charactersList)
                 }
                 _status.value = ListStatus.DONE
 

@@ -7,7 +7,8 @@ data class ApiResponse(
 
 data class DataResult(
     val results: List<CharacterApiDTO>,
-    val total: Int
+    val total: Int,
+    val count: Int
 )
 
 data class CharacterApiDTO(

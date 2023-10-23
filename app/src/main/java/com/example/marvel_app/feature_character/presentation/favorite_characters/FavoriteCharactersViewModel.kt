@@ -1,5 +1,6 @@
 package com.example.marvel_app.feature_character.presentation.favorite_characters
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
@@ -7,7 +8,7 @@ import com.example.marvel_app.feature_character.presentation.components.marvel_t
 class FavoriteCharactersViewModel : MarvelTopAppBarViewModel() {
 
     private val _favoriteCharactersList = MutableLiveData<List<Character>>()
-    override val charactersList: MutableLiveData<List<Character>> = _favoriteCharactersList
+    override val charactersList: LiveData<List<Character>> = _favoriteCharactersList
     override fun searchCharacters(offset: Int, name: String) {
         TODO("Not yet implemented")
     }

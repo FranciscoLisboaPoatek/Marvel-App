@@ -1,6 +1,7 @@
 package com.example.marvel_app.feature_character.presentation.character_detail
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,7 @@ class CharacterDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _character=  MutableLiveData<Character>()
-    val character: MutableLiveData<Character> = _character
+    val character: LiveData<Character> = _character
 
     init {
         val navigationCharacter: Character? = savedStateHandle["character"]
