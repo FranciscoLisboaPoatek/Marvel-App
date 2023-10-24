@@ -3,6 +3,7 @@ package com.example.marvel_app.feature_character.presentation
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -27,21 +28,23 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     }
     private val handler = Handler(Looper.getMainLooper())
 
+    private lateinit var imm: InputMethodManager
     fun setupMarvelAppTopBar() {
+        imm = this.requireContext()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         marvelTopAppBar.marvelTopAppBarToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.search_item -> {
                     viewModel.switchIsSearchBarOpen()
-                    if(viewModel.isSearchBarOpen.value == true) {
-                        val imm = this.requireContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    if (viewModel.isSearchBarOpen.value == true) {
+                        saveListPosition()
                         imm.showSoftInput(
                             marvelTopAppBar.marvelTopAppBarSearchText,
                             InputMethodManager.SHOW_IMPLICIT
                         )
+                    } else adjustListPosition()
 
-
-                    }
                     true
                 }
 
@@ -60,9 +63,6 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
         val searchBar: EditText = marvelTopAppBar.marvelTopAppBarSearchText
         val marvelLogo: ImageView = marvelTopAppBar.marvelTopAppBarLogo
         val context = this.requireContext()
-        val imm =
-            context
-                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val menuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
 
@@ -83,10 +83,14 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
         }
     }
 
+    abstract fun saveListPosition()
+    abstract fun adjustListPosition()
     private fun observeSearchedCharacterList() {
         viewModel.searchedCharacters.observe(viewLifecycleOwner) { searchedCharactersList ->
             if (viewModel.isSearchBarOpen.value == true) {
-                adapter.submitList(searchedCharactersList)
+                adapter.submitList(searchedCharactersList, Runnable {
+                    adjustListPosition()
+                })
             }
         }
         viewModel.foundSearchResults.observe(viewLifecycleOwner) { foundSearchResults ->
@@ -117,8 +121,10 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        //saveListPosition()
+        //Log.w("position","saved position in on destroy")
         handler.removeCallbacks(searchRunnable)
+        super.onDestroyView()
     }
 
 }

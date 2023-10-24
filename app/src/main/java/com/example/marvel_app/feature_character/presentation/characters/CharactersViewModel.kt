@@ -23,8 +23,11 @@ class CharactersViewModel @Inject constructor(
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
 
-    private var _charactersListEnded:Boolean = false
+    private var _charactersListEnded: Boolean = false
     val charactersListEnded get() = _charactersListEnded
+
+    private var _characterListPosition: Int = 0
+    val characterListPosition get() = _characterListPosition
 
     init {
         setCharactersList(0)
@@ -36,19 +39,19 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val characterListResponse = charactersListUseCase.execute(offset,null)
+                val characterListResponse = charactersListUseCase.execute(offset, null)
 
                 _charactersListEnded = characterListResponse.listEnded
                 _charactersList.value =
                     _charactersList.value?.plus(characterListResponse.charactersList)
                 _status.value = ListStatus.DONE
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 _status.value = ListStatus.ERROR
             }
         }
     }
 
-    override fun searchCharacters(offset: Int,name: String) {
+    override fun searchCharacters(offset: Int, name: String) {
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
@@ -59,16 +62,21 @@ class CharactersViewModel @Inject constructor(
                     _searchedCharacters.value = characterListResponse.charactersList
                     _foundSearchResults.value = characterListResponse.charactersList.isNotEmpty()
 
-                }else {
+                } else {
                     _searchedCharacters.value =
                         _searchedCharacters.value?.plus(characterListResponse.charactersList)
                 }
                 _status.value = ListStatus.DONE
 
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 _status.value = ListStatus.ERROR
             }
-        }    }
+        }
+    }
+
+    fun setCharactersListPosition(position:Int){
+        _characterListPosition = position
+    }
 
 
 }

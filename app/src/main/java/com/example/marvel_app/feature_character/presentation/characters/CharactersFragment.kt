@@ -1,12 +1,12 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentDiscoverBinding
@@ -34,7 +34,7 @@ class CharactersFragment :
         marvelTopAppBar.viewModel = viewModel
         setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
-        
+
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
         discoverRecyclerView.adapter = adapter
@@ -49,12 +49,17 @@ class CharactersFragment :
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if (!discoverRecyclerView.canScrollVertically(1)) {
+                if (!discoverRecyclerView.canScrollVertically(1)
+                    && viewModel.status.value != ListStatus.LOADING
+                ) {
                     if (viewModel.isSearchBarOpen.value == false && !viewModel.charactersListEnded) {
                         viewModel.setCharactersList(adapter.itemCount)
                         discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
-                    } else if (viewModel.isSearchBarOpen.value == true && !viewModel.searchedCharactersListEnded){
-                        viewModel.searchCharacters(adapter.itemCount,marvelTopAppBar.marvelTopAppBarSearchText.text.toString())
+                    } else if (viewModel.isSearchBarOpen.value == true && !viewModel.searchedCharactersListEnded) {
+                        viewModel.searchCharacters(
+                            adapter.itemCount,
+                            marvelTopAppBar.marvelTopAppBarSearchText.text.toString()
+                        )
                         discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
                     }
 
@@ -100,7 +105,7 @@ class CharactersFragment :
                 }
 
                 ListStatus.DONE -> {
-                   statusView.visibility = View.GONE
+                    statusView.visibility = View.GONE
                 }
 
                 ListStatus.ERROR -> {
@@ -116,5 +121,20 @@ class CharactersFragment :
     override fun showNoResultsFound(notFound: Boolean) {
         binding.noSearchResultMessage.visibility =
             if (notFound) View.VISIBLE else View.GONE
+    }
+
+    override fun saveListPosition() {
+        val layoutManager = binding.discoverGridRecyclerView.layoutManager as GridLayoutManager
+        val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+        viewModel.setCharactersListPosition(position)
+    }
+
+    override fun adjustListPosition() {
+        binding.discoverGridRecyclerView.post {
+            val position =
+                if (viewModel.isSearchBarOpen.value == false) viewModel.characterListPosition
+                else 0
+            binding.discoverGridRecyclerView.scrollToPosition(position)
+        }
     }
 }

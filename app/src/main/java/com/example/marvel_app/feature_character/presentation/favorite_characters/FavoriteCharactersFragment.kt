@@ -60,7 +60,15 @@ class FavoriteCharactersFragment :
         }
     }
 
-    override fun showNoResultsFound(found: Boolean) {
+    override fun showNoResultsFound(notFound: Boolean) {
 
     }
+    override fun saveListPosition() {
+
+    }
+
+    override fun adjustListPosition() {
+
+    }
+
 }
