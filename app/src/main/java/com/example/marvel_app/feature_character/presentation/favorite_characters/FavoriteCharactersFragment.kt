@@ -55,15 +55,30 @@ class FavoriteCharactersFragment :
             if (viewModel.isSearchBarOpen.value == false) {
                 viewModel.setFavoriteCharactersList()
                 adapter.submitList(favoriteCharactersList)
-                binding.noFavoritesMessage.visibility =
-                    if (favoriteCharactersList.isEmpty()) View.VISIBLE else View.GONE
+                val searchMenuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
+
+                if (favoriteCharactersList.isEmpty()) {
+                    binding.noFavoritesMessage.visibility = View.VISIBLE
+                    searchMenuItem.apply {
+                        isEnabled = false
+                        icon?.alpha=130
+                    }
+                } else {
+                    binding.noFavoritesMessage.visibility = View.GONE
+                    searchMenuItem.apply {
+                        isEnabled = true
+                        icon?.alpha=255
+                    }
+                }
             }
         }
     }
 
     override fun showNoResultsFound(notFound: Boolean) {
-
+        binding.noSearchResultMessage.visibility =
+            if (notFound) View.VISIBLE else View.GONE
     }
+
     override fun saveListPosition() {
 
     }

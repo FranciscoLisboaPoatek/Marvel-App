@@ -32,6 +32,13 @@ class CharacterRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun searchFavoriteCharacters(name: String): List<Character> =
+       withContext(Dispatchers.IO){
+           return@withContext characterDao.searchFavoriteCharactersByName(name).map {
+               CharacterMapper.favoriteCharacterDatabaseDtoToCharacter(it)
+           }
+       }
+
 
     override suspend fun markAsFavoriteCharacter(character: Character) {
         withContext(Dispatchers.IO) {

@@ -51,7 +51,6 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
             favoriteMenuItem.setOnMenuItemClickListener {
                 characterDetailViewModel.favoriteCharacter()
-                character.isFavorited = !(character.isFavorited)
                 setCharacterFavoriteIcon(character)
                 true
             }

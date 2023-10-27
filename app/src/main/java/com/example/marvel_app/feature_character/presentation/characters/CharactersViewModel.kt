@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.domain.use_cases.CharactersListUseCase
+import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharacterUseCase
 import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
     private val charactersListUseCase: CharactersListUseCase,
+    private val favoriteCharacterUseCase: FavoriteCharacterUseCase
 ) : MarvelTopAppBarViewModel() {
 
     private val _status = MutableLiveData<ListStatus>()
@@ -38,7 +40,8 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val characterListResponse = charactersListUseCase.discoverCharactersList(offset, null)
+                val characterListResponse =
+                    charactersListUseCase.discoverCharactersList(offset, null)
 
                 _charactersListEnded = characterListResponse.listEnded
                 _charactersList.value =
@@ -54,7 +57,8 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val characterListResponse = charactersListUseCase.discoverCharactersList(offset, name)
+                val characterListResponse =
+                    charactersListUseCase.discoverCharactersList(offset, name)
 
                 _searchedCharactersListEnded = characterListResponse.listEnded
                 if (offset == 0) {
@@ -73,9 +77,14 @@ class CharactersViewModel @Inject constructor(
         }
     }
 
-    fun setCharactersListPosition(position:Int){
+    fun setCharactersListPosition(position: Int) {
         _characterListPosition = position
     }
 
-
+    fun favoriteCharacter(character: Character) {
+        viewModelScope.launch {
+            favoriteCharacterUseCase.execute(character)
+        }
+        character.isFavorited = !(character.isFavorited)
+    }
 }

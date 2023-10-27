@@ -31,7 +31,6 @@ class CharactersFragment :
         discoverRecyclerView = binding.discoverGridRecyclerView
         statusView = binding.statusImage
         marvelTopAppBar = binding.marvelTopAppBar
-        marvelTopAppBar.viewModel = viewModel
         setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
 
@@ -83,7 +82,10 @@ class CharactersFragment :
                     character
                 )
             findNavController().navigate(action)
-        })
+        },
+            CharacterClickListener {character ->
+                viewModel.favoriteCharacter(character)
+            })
     }
 
     private fun observeCharactersList() {

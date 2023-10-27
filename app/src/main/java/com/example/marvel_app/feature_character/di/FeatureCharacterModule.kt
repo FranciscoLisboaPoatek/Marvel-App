@@ -9,6 +9,7 @@ import com.example.marvel_app.feature_character.data.network.CharacterApi
 import com.example.marvel_app.feature_character.domain.repository.CharacterRepository
 import com.example.marvel_app.feature_character.domain.use_cases.CharactersListUseCase
 import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharacterUseCase
+import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharactersListUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -99,6 +100,12 @@ object FeatureCharacterModule {
     @Singleton
     fun provideFavoriteCharacterUseCase(repository: CharacterRepository): FavoriteCharacterUseCase{
         return FavoriteCharacterUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteCharactersListUseCase(repository: CharacterRepository):FavoriteCharactersListUseCase{
+        return FavoriteCharactersListUseCase(repository)
     }
 
 

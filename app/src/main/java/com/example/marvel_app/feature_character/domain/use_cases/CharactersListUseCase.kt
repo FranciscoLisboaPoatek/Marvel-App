@@ -1,6 +1,5 @@
 package com.example.marvel_app.feature_character.domain.use_cases
 
-import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.domain.models.CharactersListUseCaseResponse
 import com.example.marvel_app.feature_character.domain.repository.CharacterRepository
 
@@ -15,9 +14,5 @@ class CharactersListUseCase (
             charactersWrapper.charactersList
         )
 
-    }
-
-    suspend fun favoriteCharactersList():List<Character>{
-        return repository.getFavoriteCharactersList()
     }
 }

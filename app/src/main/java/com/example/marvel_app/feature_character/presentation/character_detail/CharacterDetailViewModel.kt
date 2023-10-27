@@ -27,8 +27,11 @@ class CharacterDetailViewModel @Inject constructor(
     }
 
     fun favoriteCharacter(){
-        viewModelScope.launch {
-            character.value?.let { favoriteCharacterUseCase.execute(it) }
+        character.value?.let {character ->
+            viewModelScope.launch {
+                favoriteCharacterUseCase.execute(character)
+            }
+            character.isFavorited = !(character.isFavorited)
         }
     }
 

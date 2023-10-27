@@ -30,6 +30,8 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
 
     private lateinit var imm: InputMethodManager
     fun setupMarvelAppTopBar() {
+        marvelTopAppBar.viewModel = viewModel
+
         imm = this.requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -113,6 +115,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     private fun observeSearchText() {
 
         viewModel.searchText.observe(viewLifecycleOwner) { searchText ->
+            Log.w("serachFavorites", "text:$searchText")
             if (searchText.isBlank() || searchText == viewModel.oldSearchText) return@observe
             viewModel.setOldText(searchText)
             handler.removeCallbacks(searchRunnable)
@@ -121,8 +124,6 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     }
 
     override fun onDestroyView() {
-        //saveListPosition()
-        //Log.w("position","saved position in on destroy")
         handler.removeCallbacks(searchRunnable)
         super.onDestroyView()
     }
