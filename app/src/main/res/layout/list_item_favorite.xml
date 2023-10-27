@@ -21,15 +21,15 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/list_item_favorite_character_image_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/list_item_favorite_character_image_view_height"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/character_linear_list_img"
+            tools:src="@drawable/character_linear_list_img"
             app:strokeWidth="6dp"
             app:strokeColor="@color/black"/>
 
@@ -37,9 +37,9 @@
             android:id="@+id/list_item_favorite_name_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/list_item_favorite_character_image_view"
-            app:layout_constraintEnd_toEndOf="@id/list_item_favorite_character_image_view"
-            app:layout_constraintStart_toStartOf="@id/list_item_favorite_character_image_view">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/list_item_favorite_name_background"

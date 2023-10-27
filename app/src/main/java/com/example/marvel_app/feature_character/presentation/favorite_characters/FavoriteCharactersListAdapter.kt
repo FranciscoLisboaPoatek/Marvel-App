@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvel_app.databinding.ListItemFavoriteBinding
 import com.example.marvel_app.feature_character.domain.models.Character
+import com.example.marvel_app.feature_character.presentation.ImageType
+import com.example.marvel_app.feature_character.presentation.bindImage
+import com.example.marvel_app.feature_character.presentation.makeImageUrl
 
 class FavoriteCharactersListAdapter(private val clickListener: FavoriteCharacterClickListener) :
     ListAdapter<Character, FavoriteCharactersListAdapter.FavoriteCharacterViewHolder>(DiffCallback) {
@@ -16,6 +19,8 @@ class FavoriteCharactersListAdapter(private val clickListener: FavoriteCharacter
         fun bind(character: Character, clickListener: FavoriteCharacterClickListener) {
             binding.character = character
             binding.clickListener = clickListener
+            bindImage(binding.listItemFavoriteCharacterImageView,
+                makeImageUrl(character.imgPath,character.imgExtension, ImageType.FAVORITE))
             binding.executePendingBindings()
         }
     }

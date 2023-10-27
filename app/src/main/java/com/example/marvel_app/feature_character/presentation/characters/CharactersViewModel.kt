@@ -1,6 +1,5 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -39,7 +38,7 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val characterListResponse = charactersListUseCase.execute(offset, null)
+                val characterListResponse = charactersListUseCase.discoverCharactersList(offset, null)
 
                 _charactersListEnded = characterListResponse.listEnded
                 _charactersList.value =
@@ -55,7 +54,7 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ListStatus.LOADING
             try {
-                val characterListResponse = charactersListUseCase.execute(offset, name)
+                val characterListResponse = charactersListUseCase.discoverCharactersList(offset, name)
 
                 _searchedCharactersListEnded = characterListResponse.listEnded
                 if (offset == 0) {

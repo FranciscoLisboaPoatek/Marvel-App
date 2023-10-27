@@ -53,6 +53,7 @@ class FavoriteCharactersFragment :
     private fun observeFavoriteCharactersList() {
         viewModel.charactersList.observe(viewLifecycleOwner) { favoriteCharactersList ->
             if (viewModel.isSearchBarOpen.value == false) {
+                viewModel.setFavoriteCharactersList()
                 adapter.submitList(favoriteCharactersList)
                 binding.noFavoritesMessage.visibility =
                     if (favoriteCharactersList.isEmpty()) View.VISIBLE else View.GONE
