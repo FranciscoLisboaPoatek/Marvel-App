@@ -13,21 +13,23 @@ import com.example.marvel_app.feature_character.presentation.bindImage
 import com.example.marvel_app.feature_character.presentation.makeImageUrl
 
 class CharactersListAdapter(private val clickListener: CharacterClickListener,
-                            private val favoriteClickListener: CharacterClickListener) :
+                            private val favoriteClickListener: CharacterClickListener,
+                            private val isItemFavorited: (Character) -> Unit) :
     ListAdapter<Character, CharactersListAdapter.CharacterViewHolder>(DiffCallback) {
 
     class CharacterViewHolder(private var binding: ListItemDiscoverBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: Character, clickListener: CharacterClickListener,favoriteClickListener: CharacterClickListener) {
+        fun bind(character: Character, clickListener: CharacterClickListener,favoriteClickListener: CharacterClickListener, isItemFavorited: (Character) -> Unit) {
             binding.character = character
             binding.clickListener = clickListener
             bindImage(binding.listItemDiscoverCharacterImageView,
                 makeImageUrl(character.imgPath,character.imgExtension,ImageType.DISCOVER)
             )
+
+            isItemFavorited(character)
             setFavoriteIcon(character)
 
             binding.listItemDiscoverFavoriteIcon.setOnClickListener{
-                //character.isFavorited = !(character.isFavorited)
                 favoriteClickListener.onClick(character)
                 setFavoriteIcon(character)
             }
@@ -62,7 +64,7 @@ class CharactersListAdapter(private val clickListener: CharacterClickListener,
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = getItem(position)
-        holder.bind(character,clickListener,favoriteClickListener)
+        holder.bind(character,clickListener,favoriteClickListener,isItemFavorited)
     }
 }
 

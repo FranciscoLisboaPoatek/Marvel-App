@@ -25,7 +25,7 @@ class FavoriteCharactersFragment :
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         marvelTopAppBar = binding.marvelTopAppBar
         setupMarvelAppTopBar()
-
+        viewModel.setFavoriteCharactersList()
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
         binding.favoritesRecyclerView.adapter = adapter
@@ -53,7 +53,6 @@ class FavoriteCharactersFragment :
     private fun observeFavoriteCharactersList() {
         viewModel.charactersList.observe(viewLifecycleOwner) { favoriteCharactersList ->
             if (viewModel.isSearchBarOpen.value == false) {
-                viewModel.setFavoriteCharactersList()
                 adapter.submitList(favoriteCharactersList)
                 val searchMenuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
 

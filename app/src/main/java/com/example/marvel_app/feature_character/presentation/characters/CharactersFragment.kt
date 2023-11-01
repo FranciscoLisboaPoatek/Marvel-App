@@ -1,8 +1,10 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +15,7 @@ import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 import com.example.marvel_app.R
+import kotlinx.coroutines.runBlocking
 
 class CharactersFragment :
     MarvelTopAppBarBaseFragment<FragmentDiscoverBinding, CharactersListAdapter.CharacterViewHolder>() {
@@ -33,6 +36,7 @@ class CharactersFragment :
         marvelTopAppBar = binding.marvelTopAppBar
         setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
+        viewModel.setFavoriteCharactersList()
 
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
@@ -85,12 +89,16 @@ class CharactersFragment :
         },
             CharacterClickListener {character ->
                 viewModel.favoriteCharacter(character)
+            },
+            {character ->
+                viewModel.isItemFavorited(character)
             })
     }
 
     private fun observeCharactersList() {
         viewModel.charactersList.observe(viewLifecycleOwner) { characterList ->
             if (viewModel.isSearchBarOpen.value == false) {
+
                 adapter.submitList(characterList)
                 discoverRecyclerView.visibility =
                     if (characterList.isEmpty()) View.GONE else View.VISIBLE
@@ -139,4 +147,17 @@ class CharactersFragment :
             binding.discoverGridRecyclerView.scrollToPosition(position)
         }
     }
+
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        viewModel.setFavoriteCharactersList()
+//        return super.onCreateView(inflater, container, savedInstanceState)
+//    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        viewModel.setFavoriteCharactersList()
+//    }
 }
