@@ -51,7 +51,7 @@ class CharactersListAdapter(private val clickListener: CharacterClickListener,
         }
 
         override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.name == newItem.name && oldItem.isFavorited == newItem.isFavorited
         }
 
     }

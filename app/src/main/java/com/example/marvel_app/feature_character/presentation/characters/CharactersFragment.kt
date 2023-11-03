@@ -1,10 +1,8 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -15,7 +13,6 @@ import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 import com.example.marvel_app.R
-import kotlinx.coroutines.runBlocking
 
 class CharactersFragment :
     MarvelTopAppBarBaseFragment<FragmentDiscoverBinding, CharactersListAdapter.CharacterViewHolder>() {
@@ -36,13 +33,13 @@ class CharactersFragment :
         marvelTopAppBar = binding.marvelTopAppBar
         setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
-        viewModel.setFavoriteCharactersList()
 
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
         discoverRecyclerView.adapter = adapter
 
-        observeCharactersList()
+        viewModel.loadFavoriteCharactersList()
+        observeFavoriteStatus()
         observeStatus()
     }
 
@@ -87,10 +84,10 @@ class CharactersFragment :
                 )
             findNavController().navigate(action)
         },
-            CharacterClickListener {character ->
+            CharacterClickListener { character ->
                 viewModel.favoriteCharacter(character)
             },
-            {character ->
+            { character ->
                 viewModel.isItemFavorited(character)
             })
     }
@@ -115,7 +112,9 @@ class CharactersFragment :
                 }
 
                 ListStatus.DONE -> {
-                    statusView.visibility = View.GONE
+                    if (viewModel.favoriteStatus.value != ListStatus.LOADING) {
+                        statusView.visibility = View.GONE
+                    }
                 }
 
                 ListStatus.ERROR -> {
@@ -126,6 +125,33 @@ class CharactersFragment :
             }
 
         }
+    }
+
+    private fun observeFavoriteStatus() {
+        viewModel.favoriteStatus.observe(viewLifecycleOwner) { favoriteStatus ->
+            when (favoriteStatus) {
+                ListStatus.LOADING -> {
+                    binding.discoverGridRecyclerView.visibility = View.GONE
+                    statusView.visibility = View.VISIBLE
+                }
+
+                ListStatus.DONE -> {
+                    binding.discoverGridRecyclerView.visibility = View.VISIBLE
+                    observeCharactersList()
+                    if (viewModel.status.value != ListStatus.LOADING) {
+                        statusView.visibility = View.GONE
+                    }
+                }
+
+                ListStatus.ERROR -> {
+
+                }
+
+                else -> {}
+            }
+
+        }
+
     }
 
     override fun showNoResultsFound(notFound: Boolean) {
@@ -148,16 +174,4 @@ class CharactersFragment :
         }
     }
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        viewModel.setFavoriteCharactersList()
-//        return super.onCreateView(inflater, container, savedInstanceState)
-//    }
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        viewModel.setFavoriteCharactersList()
-//    }
 }

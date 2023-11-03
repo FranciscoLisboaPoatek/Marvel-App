@@ -1,6 +1,5 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import com.example.marvel_app.feature_character.presentation.components.marvel_t
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Semaphore
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +23,9 @@ class CharactersViewModel @Inject constructor(
 
     private val _status = MutableLiveData<ListStatus>()
     val status: LiveData<ListStatus> = _status
+
+    private val _favoriteStatus = MutableLiveData<ListStatus>()
+    val favoriteStatus: LiveData<ListStatus> = _favoriteStatus
 
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
@@ -39,14 +40,15 @@ class CharactersViewModel @Inject constructor(
 
     init {
         setCharactersList(0)
-        setFavoriteCharactersList()
+        //setFavoriteCharactersList()
         _searchedCharacters.value = listOf()
     }
 
     fun setCharactersList(offset: Int) {
+        _status.value = ListStatus.LOADING
         viewModelScope.launch {
-            _status.value = ListStatus.LOADING
             try {
+                delay(5000)
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, null)
 
@@ -61,8 +63,8 @@ class CharactersViewModel @Inject constructor(
     }
 
     override fun searchCharacters(offset: Int, name: String) {
+        _status.value = ListStatus.LOADING
         viewModelScope.launch {
-            _status.value = ListStatus.LOADING
             try {
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, name)
@@ -91,19 +93,24 @@ class CharactersViewModel @Inject constructor(
     fun favoriteCharacter(character: Character) {
         viewModelScope.launch {
             favoriteCharacterUseCase.execute(character)
+            setFavoriteCharactersList()
         }
         character.isFavorited = !(character.isFavorited)
     }
 
-    fun setFavoriteCharactersList() {
-        viewModelScope.launch {
-            _favoriteCharactersList.value = favoriteCharactersListUseCase.favoriteCharactersList()
-        }
-
+    suspend fun setFavoriteCharactersList() {
+        _favoriteCharactersList.value = favoriteCharactersListUseCase.favoriteCharactersList()
     }
 
     fun isItemFavorited(character: Character) {
         character.isFavorited = _favoriteCharactersList.value?.contains(character) ?: false
     }
 
+    fun loadFavoriteCharactersList() {
+        _favoriteStatus.value = ListStatus.LOADING
+        viewModelScope.launch {
+            setFavoriteCharactersList()
+            _favoriteStatus.value = ListStatus.DONE
+        }
+    }
 }
