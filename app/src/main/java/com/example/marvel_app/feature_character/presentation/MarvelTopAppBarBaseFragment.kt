@@ -75,6 +75,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
             marvelLogo.visibility = View.GONE
             searchBar.visibility = View.VISIBLE
             searchBar.requestFocus()
+            setScreenStatus(true)
         } else {
             menuItem.icon =
                 ContextCompat.getDrawable(context, R.drawable.ic_search)
@@ -82,8 +83,26 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
             marvelLogo.visibility = View.VISIBLE
             searchBar.visibility = View.GONE
             imm.hideSoftInputFromWindow(searchBar.windowToken, 0)
+            setScreenStatus(false)
         }
     }
+    abstract fun setScreenStatus(isSearchBarOpen:Boolean)
+    protected fun enableSearch(enable: Boolean) {
+        val searchMenuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
+
+        if (enable) {
+            searchMenuItem.apply {
+                isEnabled = true
+                icon?.alpha = 255
+            }
+        } else {
+            searchMenuItem.apply {
+                isEnabled = false
+                icon?.alpha = 130
+            }
+        }
+    }
+
 
     abstract fun saveListPosition()
     abstract fun adjustListPosition()
@@ -96,7 +115,9 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
             }
         }
         viewModel.foundSearchResults.observe(viewLifecycleOwner) { foundSearchResults ->
-            showNoResultsFound(!foundSearchResults)
+            if (viewModel.isSearchBarOpen.value == true) {
+                showNoResultsFound(!foundSearchResults)
+            }
         }
     }
 
@@ -115,10 +136,12 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     private fun observeSearchText() {
 
         viewModel.searchText.observe(viewLifecycleOwner) { searchText ->
-            Log.w("serachFavorites", "text:$searchText")
-            if (searchText.isBlank() || searchText == viewModel.oldSearchText) return@observe
-            viewModel.setOldText(searchText)
             handler.removeCallbacks(searchRunnable)
+            if (searchText.isBlank() || searchText == viewModel.oldSearchText) {
+                viewModel.setOldText(searchText)
+                return@observe
+            }
+            viewModel.setOldText(searchText)
             handler.postDelayed(searchRunnable, 1000)
         }
     }

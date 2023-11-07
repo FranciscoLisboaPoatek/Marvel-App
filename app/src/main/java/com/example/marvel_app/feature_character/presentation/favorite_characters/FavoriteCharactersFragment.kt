@@ -1,13 +1,17 @@
 package com.example.marvel_app.feature_character.presentation.favorite_characters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
+import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 
 class FavoriteCharactersFragment :
@@ -26,19 +30,15 @@ class FavoriteCharactersFragment :
         marvelTopAppBar = binding.marvelTopAppBar
         setupMarvelAppTopBar()
         viewModel.setFavoriteCharactersList()
-        setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
+        viewModel.setOldText("")
 
         binding.favoritesRecyclerView.adapter = adapter
 
         observeFavoriteCharactersList()
+        observeStatus()
+        observeSearchStatus()
     }
 
-    private fun setOrderBarTex(typeOfOrder: String, ascendingOrDescending: String) {
-        binding.listOrderBar.apply {
-            listOrderTypeText.text = typeOfOrder
-            listOrderAscDsc.text = ascendingOrDescending
-        }
-    }
 
     private fun createFavoriteCharacterListAdapter(): FavoriteCharactersListAdapter {
         return FavoriteCharactersListAdapter(FavoriteCharacterClickListener { character ->
@@ -54,21 +54,57 @@ class FavoriteCharactersFragment :
         viewModel.charactersList.observe(viewLifecycleOwner) { favoriteCharactersList ->
             if (viewModel.isSearchBarOpen.value == false) {
                 adapter.submitList(favoriteCharactersList)
-                val searchMenuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
-
-                if (favoriteCharactersList.isEmpty()) {
+                enableSearch(favoriteCharactersList.isNotEmpty())
+                if (favoriteCharactersList.isEmpty())
                     binding.noFavoritesMessage.visibility = View.VISIBLE
-                    searchMenuItem.apply {
-                        isEnabled = false
-                        icon?.alpha=130
-                    }
-                } else {
+
+            }
+        }
+    }
+
+    private fun observeStatus() {
+        viewModel.status.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                ListStatus.LOADING -> {
                     binding.noFavoritesMessage.visibility = View.GONE
-                    searchMenuItem.apply {
-                        isEnabled = true
-                        icon?.alpha=255
-                    }
+                    binding.statusImage.visibility = View.VISIBLE
+                    binding.favoritesRecyclerView.visibility = View.GONE
+                   // enableSearch(false)
+
                 }
+
+                ListStatus.DONE -> {
+                    binding.statusImage.visibility = View.GONE
+                    binding.favoritesRecyclerView.visibility = View.VISIBLE
+                    //enableSearch(true)
+
+                }
+
+                ListStatus.ERROR -> {}
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun observeSearchStatus() {
+        viewModel.searchStatus.observe(viewLifecycleOwner) { status ->
+            if (viewModel.isSearchBarOpen.value == false) return@observe
+            when (status) {
+                ListStatus.LOADING -> {
+                    binding.searchStatusImage.visibility = View.VISIBLE
+                    showNoResultsFound(false)
+                    binding.favoritesRecyclerView.visibility = View.GONE
+                }
+
+                ListStatus.DONE -> {
+                    binding.searchStatusImage.visibility = View.GONE
+                    binding.favoritesRecyclerView.visibility = View.VISIBLE
+                }
+
+                ListStatus.ERROR -> {}
+
+                else -> {}
             }
         }
     }
@@ -79,11 +115,47 @@ class FavoriteCharactersFragment :
     }
 
     override fun saveListPosition() {
-
+        val layoutManager = binding.favoritesRecyclerView.layoutManager as LinearLayoutManager
+        val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+        viewModel.setCharactersListPosition(position)
     }
 
     override fun adjustListPosition() {
+        binding.favoritesRecyclerView.post {
+            val position =
+                if (viewModel.isSearchBarOpen.value == false) viewModel.characterListPosition
+                else 0
+            binding.favoritesRecyclerView.scrollToPosition(position)
+        }
+    }
 
+    override fun setScreenStatus(isSearchBarOpen: Boolean) {
+        if (isSearchBarOpen){
+            binding.statusImage.visibility =  View.GONE
+            when(viewModel.searchStatus.value){
+                ListStatus.LOADING->{
+                    binding.searchStatusImage.visibility = View.VISIBLE
+                }
+                ListStatus.DONE->{
+                    binding.searchStatusImage.visibility = View.GONE
+                    binding.favoritesRecyclerView.visibility = View.VISIBLE
+                }
+                else -> {}
+            }
+        }else{
+            binding.searchStatusImage.visibility = View.GONE
+            when(viewModel.status.value){
+                ListStatus.LOADING->{
+                    binding.statusImage.visibility =  View.VISIBLE
+                }
+                ListStatus.DONE->{
+                    binding.statusImage.visibility =  View.GONE
+                    binding.favoritesRecyclerView.visibility = View.VISIBLE
+
+                }
+                else -> {}
+            }
+        }
     }
 
 }

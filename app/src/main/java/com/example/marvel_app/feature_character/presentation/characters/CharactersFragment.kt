@@ -1,6 +1,7 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -20,7 +21,6 @@ class CharactersFragment :
     override lateinit var marvelTopAppBar: ComponentMarvelTopAppBarBinding
     override val viewModel: CharactersViewModel by activityViewModels()
     override val adapter by lazy { createCharacterListAdapter() }
-    private lateinit var discoverRecyclerView: RecyclerView
     private lateinit var statusView: ProgressBar
 
     override fun onCreateBinding(inflater: LayoutInflater): FragmentDiscoverBinding {
@@ -28,7 +28,6 @@ class CharactersFragment :
     }
 
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
-        discoverRecyclerView = binding.discoverGridRecyclerView
         statusView = binding.statusImage
         marvelTopAppBar = binding.marvelTopAppBar
         setRecyclerViewScrollListener()
@@ -36,31 +35,32 @@ class CharactersFragment :
 
         setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
 
-        discoverRecyclerView.adapter = adapter
+        binding.discoverGridRecyclerView.adapter = adapter
 
         viewModel.loadFavoriteCharactersList()
         observeFavoriteStatus()
+        observeSearchStatus()
         observeStatus()
     }
 
     private fun setRecyclerViewScrollListener() {
-        discoverRecyclerView.addOnScrollListener(object :
+        binding.discoverGridRecyclerView.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if (!discoverRecyclerView.canScrollVertically(1)
+                if (!binding.discoverGridRecyclerView.canScrollVertically(1)
                     && viewModel.status.value != ListStatus.LOADING
                 ) {
                     if (viewModel.isSearchBarOpen.value == false && !viewModel.charactersListEnded) {
                         viewModel.setCharactersList(adapter.itemCount)
-                        discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
+                        binding.discoverGridRecyclerView.scrollToPosition(adapter.itemCount - 2)
                     } else if (viewModel.isSearchBarOpen.value == true && !viewModel.searchedCharactersListEnded) {
                         viewModel.searchCharacters(
                             adapter.itemCount,
                             marvelTopAppBar.marvelTopAppBarSearchText.text.toString()
                         )
-                        discoverRecyclerView.scrollToPosition(adapter.itemCount - 2)
+                        binding.discoverGridRecyclerView.scrollToPosition(adapter.itemCount - 2)
                     }
 
                 }
@@ -97,7 +97,7 @@ class CharactersFragment :
             if (viewModel.isSearchBarOpen.value == false) {
 
                 adapter.submitList(characterList)
-                discoverRecyclerView.visibility =
+                binding.discoverGridRecyclerView.visibility =
                     if (characterList.isEmpty()) View.GONE else View.VISIBLE
 
             }
@@ -108,18 +108,24 @@ class CharactersFragment :
         viewModel.status.observe(viewLifecycleOwner) { status ->
             when (status) {
                 ListStatus.LOADING -> {
+                    Log.w("charactes", "charactes loading")
                     statusView.visibility = View.VISIBLE
+                    if (viewModel.isSearchBarOpen.value == true) {
+                        binding.discoverGridRecyclerView.visibility = View.GONE
+                    }
+                    //enableSearch(false)
                 }
 
                 ListStatus.DONE -> {
+                    Log.w("charactes", "charactes done")
                     if (viewModel.favoriteStatus.value != ListStatus.LOADING) {
                         statusView.visibility = View.GONE
+                        binding.discoverGridRecyclerView.visibility = View.VISIBLE
                     }
+                    //enableSearch(true)
                 }
 
-                ListStatus.ERROR -> {
-
-                }
+                ListStatus.ERROR -> {}
 
                 else -> {}
             }
@@ -131,27 +137,52 @@ class CharactersFragment :
         viewModel.favoriteStatus.observe(viewLifecycleOwner) { favoriteStatus ->
             when (favoriteStatus) {
                 ListStatus.LOADING -> {
+                    Log.w("charactes", "favorites loading")
                     binding.discoverGridRecyclerView.visibility = View.GONE
                     statusView.visibility = View.VISIBLE
+                    enableSearch(false)
                 }
 
                 ListStatus.DONE -> {
+                    Log.w("charactes", "favorites done")
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                     observeCharactersList()
                     if (viewModel.status.value != ListStatus.LOADING) {
                         statusView.visibility = View.GONE
                     }
-                }
-
-                ListStatus.ERROR -> {
+                    enableSearch(true)
 
                 }
+
+                ListStatus.ERROR -> {}
 
                 else -> {}
             }
 
         }
 
+    }
+
+    private fun observeSearchStatus() {
+        viewModel.searchStatus.observe(viewLifecycleOwner) { status ->
+            if (viewModel.isSearchBarOpen.value == false) return@observe
+            when (status) {
+                ListStatus.LOADING -> {
+                    binding.searchStatusImage.visibility = View.VISIBLE
+                    showNoResultsFound(false)
+                    binding.discoverGridRecyclerView.visibility = View.GONE
+                }
+
+                ListStatus.DONE -> {
+                    binding.searchStatusImage.visibility = View.GONE
+                    binding.discoverGridRecyclerView.visibility = View.VISIBLE
+                }
+
+                ListStatus.ERROR -> {}
+
+                else -> {}
+            }
+        }
     }
 
     override fun showNoResultsFound(notFound: Boolean) {
@@ -174,4 +205,28 @@ class CharactersFragment :
         }
     }
 
+    override fun setScreenStatus(isSearchBarOpen: Boolean) {
+        if (isSearchBarOpen) {
+            binding.statusImage.visibility =  View.GONE
+            when(viewModel.searchStatus.value){
+                ListStatus.LOADING->{
+                    binding.searchStatusImage.visibility = View.VISIBLE
+                }
+                ListStatus.DONE->{
+                    binding.searchStatusImage.visibility = View.GONE
+                    binding.discoverGridRecyclerView.visibility = View.VISIBLE
+                }
+                else -> {}
+            }
+        } else {
+            binding.searchStatusImage.visibility =  View.GONE
+            if (viewModel.status.value == ListStatus.LOADING || viewModel.favoriteStatus.value == ListStatus.LOADING){
+                binding.statusImage.visibility =  View.VISIBLE
+            }else{
+                binding.statusImage.visibility =  View.GONE
+                binding.discoverGridRecyclerView.visibility = View.VISIBLE
+
+            }
+        }
+    }
 }

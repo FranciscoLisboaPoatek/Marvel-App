@@ -27,6 +27,9 @@ class CharactersViewModel @Inject constructor(
     private val _favoriteStatus = MutableLiveData<ListStatus>()
     val favoriteStatus: LiveData<ListStatus> = _favoriteStatus
 
+    private val _searchStatus = MutableLiveData<ListStatus>()
+    val searchStatus: LiveData<ListStatus> = _searchStatus
+
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
 
@@ -48,7 +51,7 @@ class CharactersViewModel @Inject constructor(
         _status.value = ListStatus.LOADING
         viewModelScope.launch {
             try {
-                delay(5000)
+                delay(10000)
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, null)
 
@@ -63,9 +66,11 @@ class CharactersViewModel @Inject constructor(
     }
 
     override fun searchCharacters(offset: Int, name: String) {
-        _status.value = ListStatus.LOADING
+        _searchStatus.value = ListStatus.LOADING
         viewModelScope.launch {
             try {
+                delay(10000)
+
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, name)
 
@@ -78,10 +83,10 @@ class CharactersViewModel @Inject constructor(
                     _searchedCharacters.value =
                         _searchedCharacters.value?.plus(characterListResponse.charactersList)
                 }
-                _status.value = ListStatus.DONE
+                _searchStatus.value = ListStatus.DONE
 
             } catch (ex: Exception) {
-                _status.value = ListStatus.ERROR
+                _searchStatus.value = ListStatus.ERROR
             }
         }
     }
@@ -99,6 +104,7 @@ class CharactersViewModel @Inject constructor(
     }
 
     suspend fun setFavoriteCharactersList() {
+        delay(5000)
         _favoriteCharactersList.value = favoriteCharactersListUseCase.favoriteCharactersList()
     }
 
