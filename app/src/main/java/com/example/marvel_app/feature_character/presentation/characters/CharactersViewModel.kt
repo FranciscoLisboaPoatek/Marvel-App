@@ -3,7 +3,6 @@ package com.example.marvel_app.feature_character.presentation.characters
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.domain.use_cases.CharactersListUseCase
@@ -12,7 +11,6 @@ import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharact
 import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +27,7 @@ class CharactersViewModel @Inject constructor(
     private val _favoriteStatus = MutableLiveData<ListStatus>()
     val favoriteStatus: LiveData<ListStatus> = _favoriteStatus
 
-    private val _searchStatus = MutableLiveData<ListStatus>()
+    private val _searchStatus = MutableLiveData<ListStatus>(ListStatus.DONE)
     val searchStatus: LiveData<ListStatus> = _searchStatus
 
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
@@ -40,12 +38,14 @@ class CharactersViewModel @Inject constructor(
     private var _charactersListEnded: Boolean = false
     val charactersListEnded get() = _charactersListEnded
 
+    private var _searchTextChanged: Boolean = true
+    val searchTextChanged get() = _searchTextChanged
+
     private var _characterListPosition: Int = 0
     val characterListPosition get() = _characterListPosition
 
     init {
         setCharactersList(0)
-        //setFavoriteCharactersList()
         _searchedCharacters.value = listOf()
     }
 
@@ -77,7 +77,6 @@ class CharactersViewModel @Inject constructor(
         _status.value = ListStatus.LOADING
         viewModelScope.launch {
             try {
-                delay(10000)
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, null)
 
@@ -92,10 +91,11 @@ class CharactersViewModel @Inject constructor(
     }
 
     override fun searchCharacters(offset: Int, name: String) {
+        _searchTextChanged = offset == 0
         _searchStatus.value = ListStatus.LOADING
+
         viewModelScope.launch {
             try {
-                delay(5000)
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, name)
 
@@ -129,7 +129,6 @@ class CharactersViewModel @Inject constructor(
     }
 
     suspend fun setFavoriteCharactersList() {
-        delay(5000)
         _favoriteCharactersList.value = favoriteCharactersListUseCase.favoriteCharactersList()
     }
 

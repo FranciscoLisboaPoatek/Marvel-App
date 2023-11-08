@@ -1,7 +1,6 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -38,9 +37,7 @@ class CharactersFragment :
         binding.discoverGridRecyclerView.adapter = adapter
 
         viewModel.loadFavoriteCharactersList()
-//        observeFavoriteStatus()
-//        observeSearchStatus()
-//        observeStatus()
+
         observeCharactersList()
         observeDiscoverStatusMediatorStatus()
         observeSearchStatusMediatorStatus()
@@ -107,94 +104,7 @@ class CharactersFragment :
             }
         }
     }
-//
-//    private fun observeStatus() {
-//        viewModel.status.observe(viewLifecycleOwner) { status ->
-//            if (viewModel.isSearchBarOpen.value == true) return@observe
-//            when (status) {
-//                ListStatus.LOADING -> {
-//                    Log.w("charactes", "charactes loading")
-//                    statusView.visibility = View.VISIBLE
-//                    if (viewModel.isSearchBarOpen.value == true) {
-//                        binding.discoverGridRecyclerView.visibility = View.GONE
-//                    }
-//                    //enableSearch(false)
-//                }
-//
-//                ListStatus.DONE -> {
-//                    Log.w("charactes", "charactes done")
-//                    if (viewModel.favoriteStatus.value != ListStatus.LOADING) {
-//                        statusView.visibility = View.GONE
-//                        binding.discoverGridRecyclerView.visibility = View.VISIBLE
-//                    }
-//                    //enableSearch(true)
-//                }
-//
-//                ListStatus.ERROR -> {}
-//
-//                else -> {}
-//            }
-//
-//        }
-//    }
-//
-//
-//
-//    private fun observeFavoriteStatus() {
-//        viewModel.favoriteStatus.observe(viewLifecycleOwner) { favoriteStatus ->
-//            when (favoriteStatus) {
-//                ListStatus.LOADING -> {
-//                    Log.w("charactes", "favorites loading")
-//                    binding.discoverGridRecyclerView.visibility = View.GONE
-//                    statusView.visibility = View.VISIBLE
-//                    enableSearch(false)
-//                }
-//
-//                ListStatus.DONE -> {
-//                    Log.w("charactes", "favorites done")
-//                    binding.discoverGridRecyclerView.visibility = View.VISIBLE
-//                    observeCharactersList()
-//                    if (viewModel.status.value != ListStatus.LOADING) {
-//                        statusView.visibility = View.GONE
-//                    }
-//                    enableSearch(true)
-//
-//                }
-//
-//                ListStatus.ERROR -> {}
-//
-//                else -> {}
-//            }
-//
-//        }
-//
-//    }
-//
-//    private fun observeSearchStatus() {
-//        viewModel.searchStatus.observe(viewLifecycleOwner) { status ->
-//            if (viewModel.isSearchBarOpen.value == false) return@observe
-//            when (status) {
-//                ListStatus.LOADING -> {
-//                    Log.w("charactes", "charactes search loading")
-//
-//                    binding.searchStatusImage.visibility = View.VISIBLE
-//                    showNoResultsFound(false)
-//                    //binding.discoverGridRecyclerView.visibility = View.GONE
-//                }
-//
-//                ListStatus.DONE -> {
-//                    Log.w("charactes", "charactes search done")
-//
-//                    binding.searchStatusImage.visibility = View.GONE
-//                    //binding.discoverGridRecyclerView.visibility = View.VISIBLE
-//                }
-//
-//                ListStatus.ERROR -> {}
-//
-//                else -> {}
-//            }
-//        }
-//    }
+
     private fun observeDiscoverStatusMediatorStatus(){
         viewModel.discoverStatusMediator.observe(viewLifecycleOwner){discoverStatusMediator ->
             if (viewModel.isSearchBarOpen.value == true)
@@ -202,22 +112,16 @@ class CharactersFragment :
 
             when (discoverStatusMediator) {
                 ListStatus.LOADING -> {
-                    Log.w("charactes", "charactes loading")
                     statusView.visibility = View.VISIBLE
                     if (viewModel.favoriteStatus.value == ListStatus.LOADING) {
                         binding.discoverGridRecyclerView.visibility = View.GONE
-                    }else binding.discoverGridRecyclerView.visibility = View.VISIBLE
-
-                    //enableSearch(false)
+                    }
                 }
 
                 ListStatus.DONE -> {
-                    Log.w("charactes", "charactes done")
-                    if (viewModel.favoriteStatus.value != ListStatus.LOADING) {
                         statusView.visibility = View.GONE
                         binding.discoverGridRecyclerView.visibility = View.VISIBLE
-                    }
-                    //enableSearch(true)
+
                 }
 
                 ListStatus.ERROR -> {}
@@ -229,22 +133,21 @@ class CharactersFragment :
     }
 
     private fun observeSearchStatusMediatorStatus(){
-        viewModel.searchStatusMediator.observe(viewLifecycleOwner){discoverStatusMediator ->
+        viewModel.searchStatusMediator.observe(viewLifecycleOwner){searchStatusMediator ->
             if (viewModel.isSearchBarOpen.value == false)
                 return@observe
 
-            when (discoverStatusMediator) {
+            when (searchStatusMediator) {
                 ListStatus.LOADING -> {
-                    Log.w("charactes", "charactes search loading")
-                    binding.searchStatusImage.visibility = View.VISIBLE
                     showNoResultsFound(false)
-                    //binding.discoverGridRecyclerView.visibility = View.GONE
+                    if(viewModel.searchTextChanged || viewModel.favoriteStatus.value == ListStatus.LOADING){
+                        binding.discoverGridRecyclerView.visibility = View.GONE
+                    }
+                    binding.statusImage.visibility = View.VISIBLE
                 }
 
                 ListStatus.DONE -> {
-                    Log.w("charactes", "charactes search done")
-
-                    binding.searchStatusImage.visibility = View.GONE
+                    binding.statusImage.visibility = View.GONE
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                 }
 
@@ -279,19 +182,23 @@ class CharactersFragment :
             binding.statusImage.visibility =  View.GONE
             when(viewModel.searchStatusMediator.value){
                 ListStatus.LOADING->{
-                    binding.searchStatusImage.visibility = View.VISIBLE
+                   binding.statusImage.visibility = View.VISIBLE
+                    binding.discoverGridRecyclerView.visibility = View.GONE
+
                 }
                 ListStatus.DONE->{
-                    binding.searchStatusImage.visibility = View.GONE
+                    binding.statusImage.visibility = View.GONE
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                 }
                 else -> {}
             }
         } else {
-            binding.searchStatusImage.visibility =  View.GONE
+            binding.statusImage.visibility =  View.GONE
             when(viewModel.discoverStatusMediator.value){
                 ListStatus.LOADING->{
                     binding.statusImage.visibility =  View.VISIBLE
+                    binding.discoverGridRecyclerView.visibility = View.GONE
+
                 }
                 ListStatus.DONE->{
                     binding.statusImage.visibility =  View.GONE
