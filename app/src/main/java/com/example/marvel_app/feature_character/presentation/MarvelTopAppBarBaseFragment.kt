@@ -24,7 +24,10 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     abstract val adapter: ListAdapter<Character, VH>
 
     private val searchRunnable = Runnable {
-        viewModel.searchText.value?.let { viewModel.searchCharacters(0, it) }
+        viewModel.searchText.value?.let {
+            viewModel.searchCharacters(0, it)
+            adjustListPosition()
+        }
     }
     private val handler = Handler(Looper.getMainLooper())
 
@@ -45,7 +48,8 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
                             marvelTopAppBar.marvelTopAppBarSearchText,
                             InputMethodManager.SHOW_IMPLICIT
                         )
-                    } else adjustListPosition()
+                    }
+                    adjustListPosition()
 
                     true
                 }
@@ -86,7 +90,8 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
             setScreenStatus(false)
         }
     }
-    abstract fun setScreenStatus(isSearchBarOpen:Boolean)
+
+    abstract fun setScreenStatus(isSearchBarOpen: Boolean)
     protected fun enableSearch(enable: Boolean) {
         val searchMenuItem = marvelTopAppBar.marvelTopAppBarToolbar.menu.findItem(R.id.search_item)
 
@@ -109,9 +114,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     private fun observeSearchedCharacterList() {
         viewModel.searchedCharacters.observe(viewLifecycleOwner) { searchedCharactersList ->
             if (viewModel.isSearchBarOpen.value == true) {
-                adapter.submitList(searchedCharactersList, Runnable {
-                    adjustListPosition()
-                })
+                adapter.submitList(searchedCharactersList)
             }
         }
         viewModel.foundSearchResults.observe(viewLifecycleOwner) { foundSearchResults ->
@@ -137,11 +140,9 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
 
         viewModel.searchText.observe(viewLifecycleOwner) { searchText ->
             handler.removeCallbacks(searchRunnable)
-            if (searchText.isBlank() || searchText == viewModel.oldSearchText) {
-                viewModel.setOldText(searchText)
+            if (searchText.isBlank()) {
                 return@observe
             }
-            viewModel.setOldText(searchText)
             handler.postDelayed(searchRunnable, 1000)
         }
     }

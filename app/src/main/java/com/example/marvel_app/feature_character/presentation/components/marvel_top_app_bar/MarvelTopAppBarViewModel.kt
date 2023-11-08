@@ -17,9 +17,6 @@ abstract class MarvelTopAppBarViewModel : ViewModel() {
     protected var _searchedCharactersListEnded: Boolean = false
     val searchedCharactersListEnded get() = _searchedCharactersListEnded
 
-    protected var _oldSearchText: String = ""
-    val oldSearchText get() = _oldSearchText
-
     protected val _foundSearchResults = MutableLiveData<Boolean>()
     val foundSearchResults: LiveData<Boolean> = _foundSearchResults
 
@@ -30,8 +27,5 @@ abstract class MarvelTopAppBarViewModel : ViewModel() {
         _isSearchBarOpen.value = !(_isSearchBarOpen.value ?: true)
     }
 
-    fun setOldText(text: String){
-        _oldSearchText = text
-    }
     abstract fun searchCharacters(offset: Int, name: String)
 }

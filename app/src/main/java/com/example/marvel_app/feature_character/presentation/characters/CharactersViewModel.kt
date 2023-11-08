@@ -1,7 +1,9 @@
 package com.example.marvel_app.feature_character.presentation.characters
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.domain.use_cases.CharactersListUseCase
@@ -47,6 +49,30 @@ class CharactersViewModel @Inject constructor(
         _searchedCharacters.value = listOf()
     }
 
+    val searchStatusMediator: LiveData<ListStatus> = MediatorLiveData<ListStatus>().apply {
+        fun updateLoading(){
+            if(searchStatus.value == ListStatus.LOADING || favoriteStatus.value == ListStatus.LOADING){
+                value = ListStatus.LOADING
+            }else if (searchStatus.value == ListStatus.DONE && favoriteStatus.value == ListStatus.DONE) {
+                value = ListStatus.DONE
+            }
+        }
+        addSource(searchStatus){updateLoading()}
+        addSource(favoriteStatus){updateLoading()}
+    }
+
+    val discoverStatusMediator: LiveData<ListStatus> = MediatorLiveData<ListStatus>().apply {
+        fun updateLoading(){
+            if(status.value == ListStatus.LOADING || favoriteStatus.value == ListStatus.LOADING){
+                value = ListStatus.LOADING
+            }else if (status.value == ListStatus.DONE && favoriteStatus.value == ListStatus.DONE) {
+                value = ListStatus.DONE
+            }
+        }
+        addSource(status){updateLoading()}
+        addSource(favoriteStatus){updateLoading()}
+    }
+
     fun setCharactersList(offset: Int) {
         _status.value = ListStatus.LOADING
         viewModelScope.launch {
@@ -69,8 +95,7 @@ class CharactersViewModel @Inject constructor(
         _searchStatus.value = ListStatus.LOADING
         viewModelScope.launch {
             try {
-                delay(10000)
-
+                delay(5000)
                 val characterListResponse =
                     charactersListUseCase.discoverCharactersList(offset, name)
 

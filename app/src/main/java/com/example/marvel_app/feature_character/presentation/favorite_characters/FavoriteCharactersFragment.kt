@@ -30,7 +30,6 @@ class FavoriteCharactersFragment :
         marvelTopAppBar = binding.marvelTopAppBar
         setupMarvelAppTopBar()
         viewModel.setFavoriteCharactersList()
-        viewModel.setOldText("")
 
         binding.favoritesRecyclerView.adapter = adapter
 
