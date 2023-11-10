@@ -7,6 +7,7 @@ interface CharacterApi {
     @GET("/v1/public/characters?limit=20&")
     suspend fun getCharacters(
         @Query("offset") offset:Int,
+        @Query("orderBy") orderBy: String,
         @Query("nameStartsWith") name:String?
     ): ApiResponse
 }

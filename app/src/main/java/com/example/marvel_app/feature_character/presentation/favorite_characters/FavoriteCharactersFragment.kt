@@ -1,14 +1,11 @@
 package com.example.marvel_app.feature_character.presentation.favorite_characters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.marvel_app.R
 import com.example.marvel_app.databinding.ComponentMarvelTopAppBarBinding
 import com.example.marvel_app.databinding.FragmentFavoritesBinding
 import com.example.marvel_app.feature_character.presentation.ListStatus
@@ -68,14 +65,12 @@ class FavoriteCharactersFragment :
                     binding.noFavoritesMessage.visibility = View.GONE
                     binding.statusImage.visibility = View.VISIBLE
                     binding.favoritesRecyclerView.visibility = View.GONE
-                   // enableSearch(false)
 
                 }
 
                 ListStatus.DONE -> {
                     binding.statusImage.visibility = View.GONE
                     binding.favoritesRecyclerView.visibility = View.VISIBLE
-                    //enableSearch(true)
 
                 }
 

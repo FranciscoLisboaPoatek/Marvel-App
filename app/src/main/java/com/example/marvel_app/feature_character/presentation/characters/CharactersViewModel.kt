@@ -9,6 +9,7 @@ import com.example.marvel_app.feature_character.domain.use_cases.CharactersListU
 import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharacterUseCase
 import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharactersListUseCase
 import com.example.marvel_app.feature_character.presentation.ListStatus
+import com.example.marvel_app.feature_character.presentation.OrderBy
 import com.example.marvel_app.feature_character.presentation.components.marvel_top_app_bar.MarvelTopAppBarViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,13 +34,19 @@ class CharactersViewModel @Inject constructor(
     private val _charactersList = MutableLiveData<List<Character>>(listOf())
     override val charactersList: LiveData<List<Character>> = _charactersList
 
+    private var _discoverOrderBy = OrderBy.NAME_ASCENDING
+    val discoverOrderBy get() = _discoverOrderBy
+
+    private var _searchOrderBy = OrderBy.NAME_ASCENDING
+    val searchOrderBy get() = _searchOrderBy
+
     private val _favoriteCharactersList = MutableLiveData<List<Character>>()
 
     private var _charactersListEnded: Boolean = false
     val charactersListEnded get() = _charactersListEnded
 
-    private var _searchTextChanged: Boolean = true
-    val searchTextChanged get() = _searchTextChanged
+    private var _searchNewList: Boolean = true
+    val searchNewList get() = _searchNewList
 
     private var _characterListPosition: Int = 0
     val characterListPosition get() = _characterListPosition
@@ -78,11 +85,15 @@ class CharactersViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val characterListResponse =
-                    charactersListUseCase.discoverCharactersList(offset, null)
+                    charactersListUseCase.discoverCharactersList(offset, _discoverOrderBy.orderType,null)
 
                 _charactersListEnded = characterListResponse.listEnded
-                _charactersList.value =
-                    _charactersList.value?.plus(characterListResponse.charactersList)
+                if(offset == 0) {
+                    _charactersList.value = characterListResponse.charactersList
+                } else {
+                    _charactersList.value =
+                        _charactersList.value?.plus(characterListResponse.charactersList)
+                }
                 _status.value = ListStatus.DONE
             } catch (ex: Exception) {
                 _status.value = ListStatus.ERROR
@@ -91,13 +102,13 @@ class CharactersViewModel @Inject constructor(
     }
 
     override fun searchCharacters(offset: Int, name: String) {
-        _searchTextChanged = offset == 0
+        _searchNewList = offset == 0
         _searchStatus.value = ListStatus.LOADING
 
         viewModelScope.launch {
             try {
                 val characterListResponse =
-                    charactersListUseCase.discoverCharactersList(offset, name)
+                    charactersListUseCase.discoverCharactersList(offset, _searchOrderBy.orderType, name)
 
                 _searchedCharactersListEnded = characterListResponse.listEnded
                 if (offset == 0) {
@@ -142,5 +153,18 @@ class CharactersViewModel @Inject constructor(
             setFavoriteCharactersList()
             _favoriteStatus.value = ListStatus.DONE
         }
+    }
+
+    fun changeOrderDiscover(){
+        _discoverOrderBy = changeOrder(_discoverOrderBy)
+    }
+
+    fun changeOrderSearch(){
+        _searchOrderBy = changeOrder(_searchOrderBy)
+    }
+
+    private fun changeOrder(order:OrderBy):OrderBy{
+        return if (order == OrderBy.NAME_ASCENDING) OrderBy.NAME_DESCENDING
+        else OrderBy.NAME_ASCENDING
     }
 }

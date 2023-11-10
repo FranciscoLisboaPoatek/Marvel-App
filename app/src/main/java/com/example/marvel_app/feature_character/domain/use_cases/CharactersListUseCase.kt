@@ -6,8 +6,8 @@ import com.example.marvel_app.feature_character.domain.repository.CharacterRepos
 class CharactersListUseCase (
     private val repository: CharacterRepository
 ){
-    suspend fun discoverCharactersList(offset:Int, name:String?): CharactersListUseCaseResponse {
-        val charactersWrapper = repository.getDiscoverCharactersList(offset,name)
+    suspend fun discoverCharactersList(offset:Int,orderBy:String, name:String?): CharactersListUseCaseResponse {
+        val charactersWrapper = repository.getDiscoverCharactersList(offset,orderBy,name)
         val listEnded = offset + charactersWrapper.listCount >= charactersWrapper.listTotal
         return CharactersListUseCaseResponse(
             listEnded,
