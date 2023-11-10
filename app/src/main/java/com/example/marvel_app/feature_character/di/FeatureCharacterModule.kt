@@ -1,14 +1,21 @@
 package com.example.marvel_app.feature_character.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.marvel_app.BuildConfig
+import com.example.marvel_app.feature_character.data.local_database.CharacterDao
+import com.example.marvel_app.feature_character.data.local_database.CharacterDatabase
 import com.example.marvel_app.feature_character.data.network.CharacterApi
 import com.example.marvel_app.feature_character.domain.repository.CharacterRepository
 import com.example.marvel_app.feature_character.domain.use_cases.CharactersListUseCase
+import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharacterUseCase
+import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharactersListUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -71,8 +78,34 @@ object FeatureCharacterModule {
 
     @Provides
     @Singleton
+    fun provideLocalDatabase(@ApplicationContext application: Context): CharacterDatabase{
+        return Room.databaseBuilder(
+            application,
+            CharacterDatabase::class.java,
+            "CharacterDatabase"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacterDao(characterDatabase: CharacterDatabase): CharacterDao = characterDatabase.characterDao()
+
+    @Provides
+    @Singleton
     fun provideCharactersListUseCase(repository: CharacterRepository): CharactersListUseCase{
         return CharactersListUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteCharacterUseCase(repository: CharacterRepository): FavoriteCharacterUseCase{
+        return FavoriteCharacterUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteCharactersListUseCase(repository: CharacterRepository):FavoriteCharactersListUseCase{
+        return FavoriteCharactersListUseCase(repository)
     }
 
 

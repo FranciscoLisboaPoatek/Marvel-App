@@ -7,7 +7,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.marvel_app.R
@@ -17,7 +16,9 @@ import com.example.marvel_app.feature_character.presentation.BaseFragment
 import com.example.marvel_app.feature_character.presentation.ImageType
 import com.example.marvel_app.feature_character.presentation.bindImage
 import com.example.marvel_app.feature_character.presentation.makeImageUrl
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
@@ -46,11 +47,11 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
                 )
             )
 
-            setCharacterFavorited(character)
+            setCharacterFavoriteIcon(character)
 
             favoriteMenuItem.setOnMenuItemClickListener {
-                character.isFavorited = !(character.isFavorited)
-                setCharacterFavorited(character)
+                characterDetailViewModel.favoriteCharacter()
+                setCharacterFavoriteIcon(character)
                 true
             }
         }
@@ -60,7 +61,7 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     }
 
-    private fun setCharacterFavorited(character: Character) {
+    private fun setCharacterFavoriteIcon(character: Character) {
         if (character.isFavorited) {
             favoriteMenuItem.icon =
                 ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_star_filled)
