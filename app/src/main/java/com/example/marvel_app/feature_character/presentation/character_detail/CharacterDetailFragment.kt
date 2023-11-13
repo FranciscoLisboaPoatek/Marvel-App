@@ -26,7 +26,7 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
 
     private lateinit var favoriteMenuItem: MenuItem
 
-    val destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
+    private val destinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
         when (destination.id) {
             R.id.characterDetailFragment ->
                 binding.toolbar.setNavigationIcon(R.drawable.arrow_back_24px)
