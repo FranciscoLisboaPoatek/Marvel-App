@@ -23,6 +23,21 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_main)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            when (destination.id) {
+                R.id.characterDetailFragment -> {
+                    val backStackEntry = navController.previousBackStackEntry
+                    val prevDestinationId = backStackEntry?.destination?.id
+                    when (prevDestinationId) {
+                        R.id.charactersFragment -> bottomNavigationView.menu.findItem(R.id.charactersFragment).isChecked = true
+                        R.id.favoriteCharactersFragment -> bottomNavigationView.menu.findItem(R.id.favoriteCharactersFragment).isChecked = true
+                    }
+                }
+                R.id.charactersFragment -> bottomNavigationView.menu.findItem(R.id.charactersFragment).isChecked = true
+                R.id.favoriteCharactersFragment -> bottomNavigationView.menu.findItem(R.id.favoriteCharactersFragment).isChecked = true
+            }
+        }
         bottomNavigationView.setupWithNavController(navController)
     }
 }

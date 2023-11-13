@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -24,6 +25,13 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
     private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
 
     private lateinit var favoriteMenuItem: MenuItem
+
+    val destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
+        when (destination.id) {
+            R.id.characterDetailFragment ->
+                binding.toolbar.setNavigationIcon(R.drawable.arrow_back_24px)
+        }
+    }
     override fun onCreateBinding(inflater: LayoutInflater): FragmentCharacterDetailBinding {
         return FragmentCharacterDetailBinding.inflate(inflater)
     }
@@ -57,10 +65,16 @@ class CharacterDetailFragment : BaseFragment<FragmentCharacterDetailBinding>() {
         }
         val appBarConfiguration = AppBarConfiguration(navHostFragment.graph)
         toolbar.setupWithNavController(navHostFragment, appBarConfiguration)
-        toolbar.setNavigationIcon(R.drawable.arrow_back_24px)
+        binding.toolbar.setNavigationIcon(R.drawable.arrow_back_24px)
 
+        findNavController().addOnDestinationChangedListener(destinationChangedListener)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        findNavController().removeOnDestinationChangedListener(destinationChangedListener)
+
+    }
     private fun setCharacterFavoriteIcon(character: Character) {
         if (character.isFavorited) {
             favoriteMenuItem.icon =
