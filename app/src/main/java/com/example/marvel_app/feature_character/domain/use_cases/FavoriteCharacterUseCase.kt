@@ -11,4 +11,8 @@ class FavoriteCharacterUseCase(
             repository.removeFavoriteCharacter(character)
         } else repository.markAsFavoriteCharacter(character)
     }
+
+    suspend fun isCharacterFavorited(character: Character):Boolean{
+        return repository.isCharacterFavorited(character.id)
+    }
 }

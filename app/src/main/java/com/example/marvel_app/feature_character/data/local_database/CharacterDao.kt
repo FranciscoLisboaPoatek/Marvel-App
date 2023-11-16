@@ -13,7 +13,8 @@ interface CharacterDao {
 
     @Query("SELECT * FROM FavoriteCharacters WHERE name LIKE :searchName")
     fun searchFavoriteCharactersByName(searchName: String): List<FavoriteCharacterDatabaseDTO>
-
+    @Query("SELECT * FROM FavoriteCharacters WHERE id LIKE :id")
+    fun searchCharacterById(id:String):FavoriteCharacterDatabaseDTO
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFavoriteCharacter(favoriteCharacterDatabaseDTO: FavoriteCharacterDatabaseDTO)
 
