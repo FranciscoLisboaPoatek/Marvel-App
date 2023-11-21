@@ -14,8 +14,8 @@ class CharacterRepositoryImpl @Inject constructor(
     private val characterApi: CharacterApi,
     private val characterDao: CharacterDao
 ) : CharacterRepository {
-    override suspend fun getDiscoverCharactersList(offset: Int, name: String?): CharactersWrapper {
-        val characterApiDTO = characterApi.getCharacters(offset, name)
+    override suspend fun getDiscoverCharactersList(offset: Int,orderBy:String ,name: String?): CharactersWrapper {
+        val characterApiDTO = characterApi.getCharacters(offset, orderBy, name)
 
         return CharactersWrapper(
             characterApiDTO.data.total,

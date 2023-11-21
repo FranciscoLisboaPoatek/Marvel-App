@@ -13,6 +13,7 @@ import com.example.marvel_app.databinding.FragmentDiscoverBinding
 import com.example.marvel_app.feature_character.presentation.ListStatus
 import com.example.marvel_app.feature_character.presentation.MarvelTopAppBarBaseFragment
 import com.example.marvel_app.R
+import com.example.marvel_app.feature_character.presentation.OrderBy
 
 class CharactersFragment :
     MarvelTopAppBarBaseFragment<FragmentDiscoverBinding, CharactersListAdapter.CharacterViewHolder>() {
@@ -32,12 +33,12 @@ class CharactersFragment :
         setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
 
-        setOrderBarTex(getString(R.string.ordering_by_name), getString(R.string.down_arrow))
+        setOrderBarText(getString(R.string.ordering_by_name))
 
         binding.discoverGridRecyclerView.adapter = adapter
 
         viewModel.loadFavoriteCharactersList()
-
+        setOrderListCLickListener()
         observeCharactersList()
         observeDiscoverStatusMediatorStatus()
         observeSearchStatusMediatorStatus()
@@ -50,13 +51,18 @@ class CharactersFragment :
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if (!binding.discoverGridRecyclerView.canScrollVertically(1)
-                    && viewModel.status.value != ListStatus.LOADING
-                ) {
-                    if (viewModel.isSearchBarOpen.value == false && !viewModel.charactersListEnded) {
+                if (!binding.discoverGridRecyclerView.canScrollVertically(1)) {
+                    if (viewModel.isSearchBarOpen.value == false
+                        && !viewModel.charactersListEnded
+                        && viewModel.discoverStatusMediator.value != ListStatus.LOADING
+                    ) {
                         viewModel.setCharactersList(adapter.itemCount)
                         binding.discoverGridRecyclerView.scrollToPosition(adapter.itemCount - 2)
-                    } else if (viewModel.isSearchBarOpen.value == true && !viewModel.searchedCharactersListEnded) {
+
+                    } else if (viewModel.isSearchBarOpen.value == true
+                        && !viewModel.searchedCharactersListEnded
+                        && viewModel.searchStatusMediator.value != ListStatus.LOADING
+                    ) {
                         viewModel.searchCharacters(
                             adapter.itemCount,
                             marvelTopAppBar.marvelTopAppBarSearchText.text.toString()
@@ -70,10 +76,19 @@ class CharactersFragment :
         })
     }
 
-    private fun setOrderBarTex(typeOfOrder: String, ascendingOrDescending: String) {
+    private fun setOrderBarText(typeOfOrder: String) {
         binding.listOrderBar.apply {
-            listOrderTypeText.text = typeOfOrder
-            listOrderAscDsc.text = ascendingOrDescending
+            if (viewModel.isSearchBarOpen.value == true) {
+                listOrderTypeText.text = typeOfOrder
+                listOrderAscDsc.text =
+                    if(viewModel.searchOrderBy == OrderBy.NAME_ASCENDING)getString(R.string.down_arrow)
+                    else getString(R.string.up_arrow)
+
+            }else {
+                listOrderTypeText.text = typeOfOrder
+                listOrderAscDsc.text =  if(viewModel.discoverOrderBy == OrderBy.NAME_ASCENDING)getString(R.string.down_arrow)
+                else getString(R.string.up_arrow)
+            }
         }
     }
 
@@ -105,13 +120,14 @@ class CharactersFragment :
         }
     }
 
-    private fun observeDiscoverStatusMediatorStatus(){
-        viewModel.discoverStatusMediator.observe(viewLifecycleOwner){discoverStatusMediator ->
+    private fun observeDiscoverStatusMediatorStatus() {
+        viewModel.discoverStatusMediator.observe(viewLifecycleOwner) { discoverStatusMediator ->
             if (viewModel.isSearchBarOpen.value == true)
                 return@observe
 
             when (discoverStatusMediator) {
                 ListStatus.LOADING -> {
+                    binding.listOrderBar.listOrderChangeBtn.isEnabled = false
                     statusView.visibility = View.VISIBLE
                     if (viewModel.favoriteStatus.value == ListStatus.LOADING) {
                         binding.discoverGridRecyclerView.visibility = View.GONE
@@ -119,8 +135,10 @@ class CharactersFragment :
                 }
 
                 ListStatus.DONE -> {
-                        statusView.visibility = View.GONE
-                        binding.discoverGridRecyclerView.visibility = View.VISIBLE
+                    binding.listOrderBar.listOrderChangeBtn.isEnabled = true
+
+                    statusView.visibility = View.GONE
+                    binding.discoverGridRecyclerView.visibility = View.VISIBLE
 
                 }
 
@@ -132,21 +150,26 @@ class CharactersFragment :
         }
     }
 
-    private fun observeSearchStatusMediatorStatus(){
-        viewModel.searchStatusMediator.observe(viewLifecycleOwner){searchStatusMediator ->
+    private fun observeSearchStatusMediatorStatus() {
+        viewModel.searchStatusMediator.observe(viewLifecycleOwner) { searchStatusMediator ->
             if (viewModel.isSearchBarOpen.value == false)
                 return@observe
 
             when (searchStatusMediator) {
                 ListStatus.LOADING -> {
+                    binding.listOrderBar.listOrderChangeBtn.isEnabled = false
+
                     showNoResultsFound(false)
-                    if(viewModel.searchTextChanged || viewModel.favoriteStatus.value == ListStatus.LOADING){
+
+                    if (viewModel.searchNewList || viewModel.favoriteStatus.value == ListStatus.LOADING) {
                         binding.discoverGridRecyclerView.visibility = View.GONE
                     }
                     binding.statusImage.visibility = View.VISIBLE
                 }
 
                 ListStatus.DONE -> {
+                    binding.listOrderBar.listOrderChangeBtn.isEnabled = true
+
                     binding.statusImage.visibility = View.GONE
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                 }
@@ -157,6 +180,7 @@ class CharactersFragment :
             }
         }
     }
+
     override fun showNoResultsFound(notFound: Boolean) {
         binding.noSearchResultMessage.visibility =
             if (notFound) View.VISIBLE else View.GONE
@@ -172,41 +196,62 @@ class CharactersFragment :
         binding.discoverGridRecyclerView.post {
             val position =
                 if (viewModel.isSearchBarOpen.value == false) viewModel.characterListPosition
-                else 0
+                else if (viewModel.searchNewList) 0
+                else return@post
             binding.discoverGridRecyclerView.scrollToPosition(position)
         }
     }
 
     override fun setScreenStatus(isSearchBarOpen: Boolean) {
         if (isSearchBarOpen) {
-            binding.statusImage.visibility =  View.GONE
-            when(viewModel.searchStatusMediator.value){
-                ListStatus.LOADING->{
-                   binding.statusImage.visibility = View.VISIBLE
+            binding.statusImage.visibility = View.GONE
+            when (viewModel.searchStatusMediator.value) {
+                ListStatus.LOADING -> {
+                    binding.statusImage.visibility = View.VISIBLE
                     binding.discoverGridRecyclerView.visibility = View.GONE
 
                 }
-                ListStatus.DONE->{
+
+                ListStatus.DONE -> {
                     binding.statusImage.visibility = View.GONE
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                 }
+
                 else -> {}
             }
         } else {
-            binding.statusImage.visibility =  View.GONE
-            when(viewModel.discoverStatusMediator.value){
-                ListStatus.LOADING->{
-                    binding.statusImage.visibility =  View.VISIBLE
+            binding.statusImage.visibility = View.GONE
+            when (viewModel.discoverStatusMediator.value) {
+                ListStatus.LOADING -> {
+                    binding.statusImage.visibility = View.VISIBLE
                     binding.discoverGridRecyclerView.visibility = View.GONE
 
                 }
-                ListStatus.DONE->{
-                    binding.statusImage.visibility =  View.GONE
+
+                ListStatus.DONE -> {
+                    binding.statusImage.visibility = View.GONE
                     binding.discoverGridRecyclerView.visibility = View.VISIBLE
                 }
+
                 else -> {}
 
             }
+        }
+        setOrderListCLickListener()
+        setOrderBarText(getString(R.string.ordering_by_name))
+    }
+
+    private fun setOrderListCLickListener() {
+        binding.listOrderBar.listOrderChangeBtn.setOnClickListener {
+            if (viewModel.isSearchBarOpen.value == true) {
+                viewModel.changeOrderSearch()
+                handler.post(searchRunnable)
+            } else {
+                viewModel.changeOrderDiscover()
+                viewModel.setCharactersList(0)
+
+            }
+            setOrderBarText(getString(R.string.ordering_by_name))
         }
     }
 }

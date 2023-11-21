@@ -3,7 +3,6 @@ package com.example.marvel_app.feature_character.presentation
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -23,13 +22,12 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     abstract val viewModel: MarvelTopAppBarViewModel
     abstract val adapter: ListAdapter<Character, VH>
 
-    private val searchRunnable = Runnable {
+    protected val searchRunnable = Runnable {
         viewModel.searchText.value?.let {
             viewModel.searchCharacters(0, it)
-            adjustListPosition()
         }
     }
-    private val handler = Handler(Looper.getMainLooper())
+    protected val handler = Handler(Looper.getMainLooper())
 
     private lateinit var imm: InputMethodManager
     fun setupMarvelAppTopBar() {
@@ -114,7 +112,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     private fun observeSearchedCharacterList() {
         viewModel.searchedCharacters.observe(viewLifecycleOwner) { searchedCharactersList ->
             if (viewModel.isSearchBarOpen.value == true) {
-                adapter.submitList(searchedCharactersList)
+                adapter.submitList(searchedCharactersList){adjustListPosition()}
             }
         }
         viewModel.foundSearchResults.observe(viewLifecycleOwner) { foundSearchResults ->
