@@ -39,6 +39,11 @@ class CharacterRepositoryImpl @Inject constructor(
            }
        }
 
+    override suspend fun isCharacterFavorited(id: String): Boolean =
+        withContext(Dispatchers.IO){
+            return@withContext characterDao.searchCharacterById(id) != null
+        }
+
 
     override suspend fun markAsFavoriteCharacter(character: Character) {
         withContext(Dispatchers.IO) {

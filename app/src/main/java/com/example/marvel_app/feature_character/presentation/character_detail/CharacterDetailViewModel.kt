@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marvel_app.feature_character.domain.models.Character
 import com.example.marvel_app.feature_character.domain.use_cases.FavoriteCharacterUseCase
+import com.example.marvel_app.feature_character.presentation.ListStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +19,9 @@ class CharacterDetailViewModel @Inject constructor(
 ): ViewModel() {
     private val _character=  MutableLiveData<Character>()
     val character: LiveData<Character> = _character
+
+    private val _favoriteStatus = MutableLiveData<ListStatus>()
+    val favoriteStatus: LiveData<ListStatus> = _favoriteStatus
 
     init {
         val navigationCharacter: Character? = savedStateHandle["character"]
@@ -35,6 +39,19 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
+    fun isCharacterFavorited(){
+        _favoriteStatus.value = ListStatus.LOADING
+        try {
+            viewModelScope.launch {
+                _character.value?.let {
+                    it.isFavorited = favoriteCharacterUseCase.isCharacterFavorited(it)
+                }
+                _favoriteStatus.value = ListStatus.DONE
+            }
+        }catch (e:Exception){
+            _favoriteStatus.value = ListStatus.ERROR
+        }
+    }
     fun onCharacterClicked(character: Character){
         _character.value = character
     }

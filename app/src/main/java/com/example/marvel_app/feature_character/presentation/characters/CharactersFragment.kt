@@ -56,17 +56,19 @@ class CharactersFragment :
                         && !viewModel.charactersListEnded
                         && viewModel.discoverStatusMediator.value != ListStatus.LOADING
                     ) {
-                        viewModel.setCharactersList(adapter.itemCount)
+                        viewModel.charactersList.value?.let { viewModel.setCharactersList(it.size) }
                         binding.discoverGridRecyclerView.scrollToPosition(adapter.itemCount - 2)
 
                     } else if (viewModel.isSearchBarOpen.value == true
                         && !viewModel.searchedCharactersListEnded
                         && viewModel.searchStatusMediator.value != ListStatus.LOADING
                     ) {
-                        viewModel.searchCharacters(
-                            adapter.itemCount,
-                            marvelTopAppBar.marvelTopAppBarSearchText.text.toString()
-                        )
+                        viewModel.searchedCharacters.value?.let {
+                            viewModel.searchCharacters(
+                                it.size,
+                                marvelTopAppBar.marvelTopAppBarSearchText.text.toString()
+                            )
+                        }
                         binding.discoverGridRecyclerView.scrollToPosition(adapter.itemCount - 2)
                     }
 
