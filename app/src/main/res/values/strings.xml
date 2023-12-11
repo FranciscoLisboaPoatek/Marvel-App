@@ -14,4 +14,5 @@ Vestibulum congue pretium mauris bibendum fermentum. Duis nunc leo, hendrerit ut
     <string name="down_arrow">↓</string>
     <string name="no_search_results_found">No results found!</string>
     <string name="no_favorites_saved">No favorites saved!</string>
+    <string name="default_description">This character has no description!</string>
 </resources>

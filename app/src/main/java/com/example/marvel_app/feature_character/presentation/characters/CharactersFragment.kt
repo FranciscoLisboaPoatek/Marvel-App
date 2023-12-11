@@ -30,8 +30,8 @@ class CharactersFragment :
     override fun setupUI(view: View, savedInstanceState: Bundle?) {
         statusView = binding.statusImage
         marvelTopAppBar = binding.marvelTopAppBar
-        setRecyclerViewScrollListener()
         setupMarvelAppTopBar()
+        setRecyclerViewScrollListener()
 
         setOrderBarText(getString(R.string.ordering_by_name))
 
@@ -51,6 +51,9 @@ class CharactersFragment :
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
+                if (viewModel.isSearchBarOpen.value == true){
+                    imm.hideSoftInputFromWindow(marvelTopAppBar.marvelTopAppBarSearchText.windowToken, 0)
+                }
                 if (!binding.discoverGridRecyclerView.canScrollVertically(1)) {
                     if (viewModel.isSearchBarOpen.value == false
                         && !viewModel.charactersListEnded
@@ -62,6 +65,7 @@ class CharactersFragment :
                     } else if (viewModel.isSearchBarOpen.value == true
                         && !viewModel.searchedCharactersListEnded
                         && viewModel.searchStatusMediator.value != ListStatus.LOADING
+                        && viewModel.searchedCharacters.value?.isNotEmpty() == true
                     ) {
                         viewModel.searchedCharacters.value?.let {
                             viewModel.searchCharacters(

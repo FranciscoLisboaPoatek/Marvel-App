@@ -29,7 +29,7 @@ abstract class MarvelTopAppBarBaseFragment<B : ViewBinding, VH : RecyclerView.Vi
     }
     protected val handler = Handler(Looper.getMainLooper())
 
-    private lateinit var imm: InputMethodManager
+    protected lateinit var imm: InputMethodManager
     fun setupMarvelAppTopBar() {
         marvelTopAppBar.viewModel = viewModel
 
