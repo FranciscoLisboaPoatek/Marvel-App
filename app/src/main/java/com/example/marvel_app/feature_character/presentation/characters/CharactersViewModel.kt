@@ -50,6 +50,7 @@ class CharactersViewModel @Inject constructor(
 
     private var _characterListPosition: Int = 0
     val characterListPosition get() = _characterListPosition
+    private var oldText: String = ""
 
     init {
         setCharactersList(0)
@@ -102,6 +103,8 @@ class CharactersViewModel @Inject constructor(
     }
 
     override fun searchCharacters(offset: Int, name: String) {
+        if (name == oldText && offset == 0) return
+        oldText = name
         _searchNewList = offset == 0
         _searchStatus.value = ListStatus.LOADING
 
